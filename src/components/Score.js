@@ -13,10 +13,10 @@ export default function Score(props) {
         var score = vf.EasyScore();
         var system = vf.System();
         system.addStave({
-            voices: [score.voice(score.notes(props.notes.vexStr))]
-          }).addClef('treble')
+            voices: [score.voice(score.notes(props.notes.vexStr, {clef: props.clef}))]
+          }).addClef(props.clef)
         vf.draw();
-    }, [props.notes])
+    }, [props.notes, props.clef])
 
     return (
         <div>
