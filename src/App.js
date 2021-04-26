@@ -1,31 +1,39 @@
-import {useState} from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
 import ChordCalculator from './components/ChordCalculator';
 import './App.css';
 
 
 function App() {
-  const [size, setSize] = useState(true);
-
-  function toggleSize() {
-    setSize(!size);
-  }
-
-  if (size) {
-    return (
-      <div className="App">
-        <button onClick={toggleSize}>Toggle</button>
-        <ChordCalculator />
+  return (
+    <Router>
+      <div>
+        <nav className="navbar">
+          <h1>Practice Room</h1>
+          <ul>
+            <li>
+              <Link to="/chords">Chord Calculator</Link>
+            </li>
+            <li>
+              <Link to="/nothing">Nothing</Link>
+            </li>
+          </ul>
+        </nav>
       </div>
-    );
-  } else {
-    return (
-      <div className="App">
-        <div>Seventh Chords: TODO</div>
-        <button onClick={toggleSize}>back to triads</button>
-      </div>
-    )
-  }
-  
+      <Switch>
+        <Route path="/chords">
+          <ChordCalculator />
+        </Route>
+        <Route path="/nothing">
+          <div>Nothing here</div>
+        </Route>
+      </Switch>
+    </Router>
+  );
 }
 
 export default App;

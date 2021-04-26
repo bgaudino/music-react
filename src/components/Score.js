@@ -13,14 +13,14 @@ export default function Score(props) {
         var score = vf.EasyScore();
         var system = vf.System();
         system.addStave({
-            voices: [score.voice(score.notes(props.notes))]
+            voices: [score.voice(score.notes(props.notes.vexStr))]
           }).addClef('treble')
         vf.draw();
     }, [props.notes])
 
     return (
         <div>
-            <h2>{props.spelling}</h2>
+            <h2>{props.notes.display}</h2>
             <div id="staff">
             </div>
         </div>
