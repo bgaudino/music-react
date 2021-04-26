@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+import {useState} from 'react';
+import ChordCalculator from './components/ChordCalculator';
 import './App.css';
 
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [size, setSize] = useState(true);
+
+  function toggleSize() {
+    setSize(!size);
+  }
+
+  if (size) {
+    return (
+      <div className="App">
+        <button onClick={toggleSize}>Toggle</button>
+        <ChordCalculator />
+      </div>
+    );
+  } else {
+    return (
+      <div className="App">
+        <div>Seventh Chords: TODO</div>
+        <button onClick={toggleSize}>back to triads</button>
+      </div>
+    )
+  }
+  
 }
 
 export default App;
