@@ -2,6 +2,7 @@ import {useState} from 'react';
 import Score from './Score';
 import {alphabet, triadQualities} from './musicConstants'
 import { calculateChord } from './musicFunctions';
+import * as Tone from 'tone';
 
 const sevenths = ['major 7', 'dominant 7', 'minor 7', 'half-diminshed 7', 'diminished 7', 'minor-major 7'];
 
@@ -12,6 +13,7 @@ export default function ChordCalculator() {
     clef: 'treble',
     toneArr: ['C4', 'E4', 'G4'],
   });
+  const [sound, setSound] = useState(false);
   const [inversion, setInversion] = useState('0');
   const [clef, setClef] = useState('treble');
   const [root, setRoot] = useState('C');
@@ -37,7 +39,15 @@ export default function ChordCalculator() {
   function handleClick() {
     const chord = calculateChord(root, accidental, quality, clef, inversion)
     setNotes(chord);
+    if (sound) {
+      const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+      const now = Tone.now()
+      chord.toneArr.forEach(note => synth.triggerAttackRelease(note, '2n', now));
+    }  
+  }
 
+  function handleSoundChange(e) {
+    (e.target.value === 'on') ? setSound(true) : setSound(false);
   }
 
   function handleQualityChange(e) {
@@ -54,8 +64,6 @@ export default function ChordCalculator() {
               <option value="alto">Alto</option>
               <option value="bass">Bass</option>
             </select>
-        </div>
-        <div className="input-group form">
             <span className="input-group-text">Root:</span>
             <select className="form-select" onChange={handleRootChange}>
               {alphabet.map(note => <option value={note}>{note}</option>)}
@@ -78,6 +86,11 @@ export default function ChordCalculator() {
             <span className="input-group-text">Quality:</span>
             <select className="form-select" onChange={handleQualityChange}>
               {triadQualities.map(quality => <option value={quality}>{quality}</option>)}
+            </select>
+            <span className="input-group-text">Sound:</span>
+            <select className="form-select" onChange={handleSoundChange}>
+              <option value="off">off</option>
+              <option value="on">on</option>
             </select>
             <button className="btn btn-primary" onClick={handleClick}>Submit</button>
         </div>
