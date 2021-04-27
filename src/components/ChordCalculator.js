@@ -45,15 +45,21 @@ export default function ChordCalculator() {
   function handleClick() {
     const chord = calculateChord(root, accidental, quality, clef, inversion)
     setNotes(chord);
-    if (sound) {
+    if (sound !== 'off') {
+      let timeStart = 0;
+      let timeAdd = null;
+      (sound === 'arpeggio') ? timeAdd = 0.5 : timeAdd = 0;
       const synth = new Tone.PolySynth(Tone.Synth).toDestination();
       const now = Tone.now()
-      chord.toneArr.forEach(note => synth.triggerAttackRelease(note, '2n', now));
+      chord.toneArr.forEach(note => {
+        synth.triggerAttackRelease(note, '2n', now + timeStart);
+        timeStart += timeAdd;
+      });
     }  
   }
 
   function handleSoundChange(e) {
-    (e.target.value === 'on') ? setSound(true) : setSound(false);
+    setSound(e.target.value);
   }
 
   function handleQualityChange(e) {
@@ -105,7 +111,8 @@ export default function ChordCalculator() {
           <InputLabel id="sound-label">Sound</InputLabel>
           <Select id="sound" labelId="sound-label" value={sound} onChange={handleSoundChange}>
             <MenuItem value="off">off</MenuItem>
-            <MenuItem value="on">on</MenuItem>
+            <MenuItem value="chord">chord</MenuItem>
+            <MenuItem value="arpeggio">arpeggio</MenuItem>
           </Select>
         </FormControl>
         <Button variant='contained' color='primary' onClick={handleClick}>Submit</Button>
