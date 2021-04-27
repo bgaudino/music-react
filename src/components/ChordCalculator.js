@@ -1,5 +1,8 @@
 import {useState} from 'react';
 import Score from './Score';
+import RootSelect from './RootSelect';
+import ClefSelect from './ClefSelect';
+import AccidentalSelect from './AccidentalSelect';
 import {alphabet, chordQualities} from './musicConstants'
 import { calculateChord } from './musicFunctions';
 import * as Tone from 'tone';
@@ -66,31 +69,19 @@ export default function ChordCalculator() {
     setQuality(e.target.value);
   }
 
-  const styles = {width: '16%'};
+  const styles = {width: '33%'};
     return (
       <div className="content">
         <h2>Chord Calculator</h2>
+        <div style={{maxWidth: '720px', margin: 'auto'}}>
         <FormControl style={styles} >
-          <InputLabel id="clef-label">Clef</InputLabel>
-          <Select labelId="clef-label" id="clef" value={clef} onChange={handleClefChange}>
-            <MenuItem value="treble">Treble</MenuItem>
-            <MenuItem value="alto">Alto</MenuItem>
-            <MenuItem value="bass">Bass</MenuItem>
-          </Select>
+          <ClefSelect value={clef} onChange={handleClefChange} />
         </FormControl>
         <FormControl style={styles} >
-          <InputLabel id="root-label">Root</InputLabel>
-          <Select labelId="root-label" id="root" value={root} onChange={handleRootChange}>
-            {alphabet.map(note => <MenuItem value={note}>{note}</MenuItem>)}
-          </Select>
+          <RootSelect value={root} onChange={handleRootChange}/>
         </FormControl>
         <FormControl style={styles} >
-          <InputLabel id="accidental-label">Accidental</InputLabel>
-          <Select id="accidental" labelId="accidental-label" value={accidental} onChange={handleAccidentalChange}>
-            <MenuItem value="natural">natural</MenuItem>
-            <MenuItem value="sharp">sharp</MenuItem>
-            <MenuItem value="flat">flat</MenuItem>
-          </Select>
+          <AccidentalSelect value={accidental} onChange={handleAccidentalChange} />
         </FormControl>
         <FormControl style={styles} >
           <InputLabel id="quality-label">Quality</InputLabel>
@@ -101,7 +92,7 @@ export default function ChordCalculator() {
         <FormControl style={styles} >
           <InputLabel id="inverion-label">Inversion</InputLabel>
           <Select id="inversion" labelId="inversion-label" value={inversion} onChange={handleInversionChange}>
-            <MenuItem value="0">Root position</MenuItem>
+            <MenuItem value="0">root position</MenuItem>
             <MenuItem value="1">1st inversion</MenuItem>
             <MenuItem value="2">2nd inversion</MenuItem>
             {sevenths.includes(quality) ? <MenuItem value="3">3rd inversion</MenuItem> : null}
@@ -115,6 +106,7 @@ export default function ChordCalculator() {
             <MenuItem value="arpeggio">arpeggio</MenuItem>
           </Select>
         </FormControl>
+        </div>
         <Button variant='contained' color='primary' onClick={handleClick}>Submit</Button>
         <Score notes={notes} numNotes="1"/>
       </div>
