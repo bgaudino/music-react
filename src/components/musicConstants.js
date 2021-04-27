@@ -1,5 +1,6 @@
 export const stackedThirds = ["C", "E", "G", "B", "D", "F", "A"];
 export const alphabet = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+export const majorScaleSteps = [2, 2, 1, 2, 2, 2, 1]
 export const triadQualities = [
     'major', 
     'minor', 

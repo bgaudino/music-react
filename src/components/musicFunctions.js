@@ -1,16 +1,49 @@
 import {stackedThirds, chordSteps} from './musicConstants';
 
-export function calculateChord(root, accidental, quality) {
+export function calculateChord(root, accidental, quality, clef, inversion) {
     let thirdsFromRoot = [...stackedThirds];
     let stepsFromRoot = [...chordSteps];
+
+    // find appropriate octave for clef
+    const octaves = [4, 4, 4, 4, 4, 4, 4];
+    let octavesDown = 0;
+    if (clef === 'alto') octavesDown = 1;
+    if (clef === 'bass') octavesDown = 2;
+    if (octavesDown > 0) {
+        for (let i = 0; i < octaves.length; i++) {
+            octaves[i] -= octavesDown;
+        }
+    }
 
     // reorder notes to start on root
     while (thirdsFromRoot[0] !== root.toUpperCase()) {
         let addNoteToEnd = thirdsFromRoot.shift();
         let addStepsToEnd = stepsFromRoot.shift();
+        let octaveUp = octaves.shift() + 1;
         thirdsFromRoot.push(addNoteToEnd);
         stepsFromRoot.push(addStepsToEnd);
+        octaves.push(octaveUp);
     }
+
+    // fix octaves, in a hackish way =(
+    switch(root) {
+        case 'E':
+            octaves[3]++;
+            break;
+        case 'G':
+            octaves[3]++;
+            octaves[2]++;
+            break;
+        case 'B':
+            octaves[3]++;
+            octaves[2]++;
+            octaves[1]++;
+            break;
+        default:
+            break;
+    }
+
+
     // add accidental to root
     if (accidental === 'sharp') {
         thirdsFromRoot[0] += '#';
@@ -41,18 +74,30 @@ export function calculateChord(root, accidental, quality) {
     let chord = { 
         vexStr: '(',
         display: '',
+        clef: clef,
     }
+
+    // remove unneeded extensions
+    thirdsFromRoot.splice(steps.length + 1, thirdsFromRoot.length - steps.length);
+    octaves.splice(steps.length + 1, octaves.length - steps.length);
+    console.log(octaves);
+    for (let i = 0; i < Number(inversion); i++) {
+        thirdsFromRoot.push(thirdsFromRoot.shift());
+        octaves.push(octaves.shift() + 1);
+    }
+
     for (let i = 0; i < steps.length + 1; i++) {
-        chord.vexStr += thirdsFromRoot[i] + '4 ';
+        chord.vexStr += thirdsFromRoot[i] + octaves[i];
         chord.display += thirdsFromRoot[i] + ' ';
     }
-    chord.vexStr = chord.vexStr.trim().concat(')/w');
+    chord.vexStr += ')/w';
     chord.display = chord.display.trim()
         .replaceAll('##', '𝄪')
         .replaceAll('#', '♯')
         .replaceAll('bb', '𝄫')
         .replaceAll('b', '♭');
     
+    console.log(chord);
     return chord;
 }
 
@@ -95,3 +140,5 @@ function findChordStepsByQuality(quality) {
     }
     return steps;
 }
+
+  
