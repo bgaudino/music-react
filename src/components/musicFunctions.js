@@ -1,4 +1,4 @@
-import {stackedThirds, chordSteps} from './musicConstants';
+import {stackedThirds, chordSteps, doubleAccidentals} from './musicConstants';
 
 export function calculateChord(root, accidental, quality, clef, inversion) {
     let thirdsFromRoot = [...stackedThirds];
@@ -88,7 +88,12 @@ export function calculateChord(root, accidental, quality, clef, inversion) {
     }
 
     for (let i = 0; i < steps.length + 1; i++) {
-        chord.toneArr.push(thirdsFromRoot[i] + octaves[i]);
+        if (doubleAccidentals.includes(thirdsFromRoot[i])) {
+            const respelling = enharmonicRespell(thirdsFromRoot[i]);
+            chord.toneArr.push(respelling + octaves[i]);
+        } else {
+            chord.toneArr.push(thirdsFromRoot[i] + octaves[i]);
+        }
         chord.vexStr += thirdsFromRoot[i] + octaves[i];
         chord.display += thirdsFromRoot[i] + ' ';
     }
@@ -144,4 +149,38 @@ function findChordStepsByQuality(quality) {
     return steps;
 }
 
+function enharmonicRespell(note) {
+    switch (note) {
+        case 'A##':
+            return 'B'
+        case 'B##':
+            return 'C#';
+        case 'C##':
+            return 'D';
+        case 'D##':
+            return 'E';
+        case 'E##':
+            return 'F#';
+        case 'F##':
+            return 'G';
+        case 'G##':
+            return 'A';
+        case 'Abb':
+            return 'G'
+        case 'Bbb':
+            return 'A';
+        case 'Cbb':
+            return 'Bb';
+        case 'Dbb':
+            return 'C';
+        case 'Ebb':
+            return 'D';
+        case 'Fbb':
+            return 'Eb';
+        case 'Gbb':
+            return 'F';
+        default:
+            break;
+    }
+}
   
