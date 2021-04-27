@@ -1,7 +1,5 @@
 .content {
   text-align: center;
-  background-color: #282c34;
-  color: white;
   height: 100vh;
   padding: 40px 0;
   font-size: calc(10px + 2vmin);
@@ -10,4 +8,8 @@
 .form {
   margin: 20px auto;
   max-width: 900px;
+}
+
+.FormControl {
+  width: 100%;
 }
