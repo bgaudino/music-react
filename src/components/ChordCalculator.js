@@ -116,7 +116,7 @@ export default function ChordCalculator() {
           </Select>
         </FormControl>
         <Button variant='contained' color='primary' onClick={handleClick}>Submit</Button>
-        <Score notes={notes} />
+        <Score notes={notes} numNotes="1"/>
       </div>
     );
   }

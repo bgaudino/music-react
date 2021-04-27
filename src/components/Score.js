@@ -12,12 +12,17 @@ export default function Score(props) {
         var vf = new VF.Factory({renderer: {elementId: 'staff'}});
         var score = vf.EasyScore();
         var system = vf.System();
+        score.set({time: props.numNotes + '/1'})
         system.addStave({
-            voices: [score.voice(score.notes(props.notes.vexStr, {clef: props.notes.clef, key: 'C'}))]
+            voices: [
+                score.voice(score.notes(props.notes.vexStr, {
+                    clef: props.notes.clef, 
+                    key: 'C',
+                }))]
           }).addClef(props.notes.clef)
         vf.draw();
         
-    }, [props.notes])
+    }, [props.notes, props.numNotes])
 
     return (
         <div>

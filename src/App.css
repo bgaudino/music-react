@@ -1,7 +1,9 @@
-.content {
+.App {
   text-align: center;
+}
+.content {
   height: 100vh;
-  padding: 40px 0;
+  padding: 120px 0;
   font-size: calc(10px + 2vmin);
 }
 
