@@ -73,6 +73,7 @@ export function calculateChord(root, accidental, quality, clef, inversion) {
 
     let chord = { 
         vexStr: '(',
+        toneArr: [],
         display: '',
         clef: clef,
     }
@@ -87,9 +88,11 @@ export function calculateChord(root, accidental, quality, clef, inversion) {
     }
 
     for (let i = 0; i < steps.length + 1; i++) {
+        chord.toneArr.push(thirdsFromRoot[i] + octaves[i]);
         chord.vexStr += thirdsFromRoot[i] + octaves[i];
         chord.display += thirdsFromRoot[i] + ' ';
     }
+
     chord.vexStr += ')/w';
     chord.display = chord.display.trim()
         .replaceAll('##', '𝄪')

@@ -3,14 +3,14 @@ import Score from './Score';
 import {alphabet, triadQualities} from './musicConstants'
 import { calculateChord } from './musicFunctions';
 
-const triads = ['major', 'minor', 'diminished', 'augmented'];
 const sevenths = ['major 7', 'dominant 7', 'minor 7', 'half-diminshed 7', 'diminished 7', 'minor-major 7'];
 
 export default function ChordCalculator() {
   const [notes, setNotes] = useState({
     vexStr: '(C4 E4 G4)/w',
     display: 'C E G',
-    clef: 'treble'
+    clef: 'treble',
+    toneArr: ['C4', 'E4', 'G4'],
   });
   const [inversion, setInversion] = useState('0');
   const [clef, setClef] = useState('treble');
@@ -37,6 +37,7 @@ export default function ChordCalculator() {
   function handleClick() {
     const chord = calculateChord(root, accidental, quality, clef, inversion)
     setNotes(chord);
+
   }
 
   function handleQualityChange(e) {
