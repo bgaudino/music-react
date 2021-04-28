@@ -10,7 +10,7 @@ export default function RootSelect(props) {
         <FormControl >
           <InputLabel id="root-label">Root</InputLabel>
           <Select labelId="root-label" id="root" value={props.value} onChange={props.onChange}>
-            {alphabet.map(note => <MenuItem value={note}>{note}</MenuItem>)}
+            {alphabet.map(note => <MenuItem key={note} value={note}>{note}</MenuItem>)}
           </Select>
         </FormControl>
     )

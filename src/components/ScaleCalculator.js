@@ -67,16 +67,16 @@ export default function ScaleCalculator() {
                 <FormControl style={styles} >
                     <InputLabel id="scale-type-label">Scale type</InputLabel>
                     <Select value={scaleType} onChange={handleScaleTypeChange}>
-                        {scaleTypes.map(type => <MenuItem value={type}>{type}</MenuItem>)}
+                        {scaleTypes.map(type => <MenuItem key={type} value={type}>{type}</MenuItem>)}
                     </Select>
                 </FormControl>
                 <FormControl style={styles} >
                     <InputLabel id="mode-label">Mode</InputLabel>
                     <Select value={mode} onChange={handleModeChange}>
-                        {scaleType === 'major' ? modes.major.map(mode => <MenuItem value={modes.major.indexOf(mode)}>{mode}</MenuItem>) : null}
-                        {scaleType === 'harmonic minor' ? modes.harmonicMinor.map(mode => <MenuItem value={modes.harmonicMinor.indexOf(mode)}>{mode}</MenuItem>) : null}
-                        {scaleType === 'melodic minor' ? modes.melodicMinor.map(mode => <MenuItem value={modes.melodicMinor.indexOf(mode)}>{mode}</MenuItem>) : null}
-                        {scaleType === 'harmonic major' ? modes.harmonicMinor.map(mode => <MenuItem value={modes.harmonicMinor.indexOf(mode)}>{mode}</MenuItem>) : null}
+                        {scaleType === 'major' ? modes.major.map(mode => <MenuItem key={mode} value={modes.major.indexOf(mode)}>{mode}</MenuItem>) : null}
+                        {scaleType === 'harmonic minor' ? modes.harmonicMinor.map(mode => <MenuItem key={mode} value={modes.harmonicMinor.indexOf(mode)}>{mode}</MenuItem>) : null}
+                        {scaleType === 'melodic minor' ? modes.melodicMinor.map(mode => <MenuItem key={mode} value={modes.melodicMinor.indexOf(mode)}>{mode}</MenuItem>) : null}
+                        {scaleType === 'harmonic major' ? modes.harmonicMinor.map(mode => <MenuItem key={mode} value={modes.harmonicMinor.indexOf(mode)}>{mode}</MenuItem>) : null}
                     </Select>
                 </FormControl>
                 <FormControl style={styles}>

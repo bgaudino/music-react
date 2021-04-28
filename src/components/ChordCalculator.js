@@ -70,7 +70,7 @@ export default function ChordCalculator() {
         <FormControl style={styles} >
           <InputLabel id="quality-label">Quality</InputLabel>
             <Select id="quality" labelId="quality-label" value={quality} onChange={handleQualityChange}>
-              {chordQualities.map(quality => <MenuItem value={quality}>{quality}</MenuItem>)}
+              {chordQualities.map(quality => <MenuItem key={quality} value={quality}>{quality}</MenuItem>)}
             </Select>
         </FormControl>
         <FormControl style={styles} >
