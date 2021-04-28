@@ -74,6 +74,95 @@ export function calculateScale(root, clef, accidental, scaleType, mode) {
 
 }
 
+export function calculateInterval(root, accidental, genericInterval, quality, clef) {
+    let scale = {
+        notes: [...alphabet],
+        steps: [...majorScaleSteps],
+        octaves: [4, 4, 4, 4, 4, 4, 4],
+    }
+    
+    // find appropriate octave for clef
+    let octavesDown = 0;
+    if (clef === 'alto') octavesDown = 1;
+    if (clef === 'bass') octavesDown = 2;
+    if (octavesDown > 0) {
+        scale.octaves = scale.octaves.map(octave => octave - octavesDown);
+    }
+
+    while (root !== scale.notes[0]) {
+        scale.notes.push(scale.notes.shift());
+        scale.steps.push(scale.steps.shift());
+        scale.octaves.push(scale.octaves.shift() + 1);
+    }
+    let interval = {
+        notes: [scale.notes[0]],
+        octaves: [scale.octaves[0]],
+        clef: clef,
+        vexStr: '(',
+        steps: 0,
+        adjustedSteps: 0,
+        display: '',
+        toneArr: [],
+    }
+    if (genericInterval === 7) {
+        interval.notes.push(interval.notes[0]);
+        interval.octaves.push(interval.octaves[0] + 1);
+    } else {
+        interval.notes.push(scale.notes[genericInterval]);
+        interval.octaves.push(scale.octaves[genericInterval]);
+        for (let i = 0; i < genericInterval; i++) {
+            interval.steps += scale.steps[i];
+            interval.adjustedSteps += majorScaleSteps[i];
+        }
+    }
+    switch(quality) {
+        case 'minor':
+            interval.adjustedSteps--;
+            break;
+        case 'augmented':
+            interval.adjustedSteps++;
+            break;
+        case 'diminished':
+            interval.adjustedSteps--;
+            break;
+        default:
+            break;
+    }
+
+    // add accidental to root
+    if (accidental === 'sharp') {
+        interval.notes[0] += '#';
+        interval.steps--;
+    } else if (accidental === 'flat') {
+        interval.notes[0] += 'b';
+        interval.steps++;
+    }
+    interval.display = interval.notes[0];
+
+    if (interval.steps === interval.adjustedSteps - 2) {
+        interval.notes[1] += '##';
+    } else if (interval.steps === interval.adjustedSteps - 1) {
+        interval.notes[1] += '#';
+    } else if (interval.steps === interval.adjustedSteps + 2) {
+        interval.notes[1] += 'bb';
+    } else if (interval.steps === interval.adjustedSteps + 1) {
+        interval.notes[1] += 'b'
+    }
+    
+    for (let i = 0; i < interval.notes.length; i++) {
+        interval.vexStr += interval.notes[i] + interval.octaves[i];
+        interval.toneArr.push(interval.notes[i] + interval.octaves[i]);
+    } interval.vexStr += ')/w';
+    interval.display += ' ' + interval.notes[1]
+    interval.display = interval.display
+        .replaceAll('##', '𝄪')
+        .replaceAll('#', '♯')
+        .replaceAll('bb', '𝄫')
+        .replaceAll('b', '♭');
+
+    return interval;
+}
+
 export function calculateChord(root, accidental, quality, clef, inversion) {
     let thirdsFromRoot = [...stackedThirds];
     let stepsFromRoot = [...chordSteps];
@@ -153,7 +242,7 @@ export function calculateChord(root, accidental, quality, clef, inversion) {
     // remove unneeded extensions
     thirdsFromRoot.splice(steps.length + 1, thirdsFromRoot.length - steps.length);
     octaves.splice(steps.length + 1, octaves.length - steps.length);
-    console.log(octaves);
+
     for (let i = 0; i < Number(inversion); i++) {
         thirdsFromRoot.push(thirdsFromRoot.shift());
         octaves.push(octaves.shift() + 1);

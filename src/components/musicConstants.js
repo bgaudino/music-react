@@ -13,6 +13,7 @@ export const chordQualities = [
     'diminished 7',
     'minor-major 7'
 ];
+export const sevenths = ['major 7', 'dominant 7', 'minor 7', 'half-diminshed 7', 'diminished 7', 'minor-major 7'];
 export const scaleTypes = ['major', 'harmonic minor', 'melodic minor', 'harmonic major'];
 export const chordSteps = [4, 3, 4, 3, 3, 4, 3]
 export const doubleAccidentals = [
@@ -57,3 +58,11 @@ export const modes = {
         'Locrian 𝄫7'
     ]
 }
+export const intervals = {
+    genericIntervals: ['unison', '2nd', '3rd', '4th', '5th', '6th', '7th', 'octave'],
+    imperfectIntervals: [1, 2, 5, 6],
+    imperfectQualities: ['major', 'minor'],
+    perfectIntervals: [0, 3, 4, 7],
+    perfectQualities: ['perfect', 'augmented', 'diminished'],
+}
+

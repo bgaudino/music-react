@@ -3,7 +3,7 @@ import Score from './Score';
 import RootSelect from './RootSelect';
 import ClefSelect from './ClefSelect';
 import AccidentalSelect from './AccidentalSelect';
-import {chordQualities} from './musicConstants'
+import {chordQualities, sevenths} from './musicConstants'
 import {calculateChord} from './musicFunctions';
 import * as Tone from 'tone';
 
@@ -13,7 +13,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const sevenths = ['major 7', 'dominant 7', 'minor 7', 'half-diminshed 7', 'diminished 7', 'minor-major 7'];
 
 export default function ChordCalculator() {
   const [notes, setNotes] = useState({
@@ -23,7 +22,7 @@ export default function ChordCalculator() {
     toneArr: ['C4', 'E4', 'G4'],
   });
   const [sound, setSound] = useState('off');
-  const [inversion, setInversion] = useState('0');
+  const [inversion, setInversion] = useState(0);
   const [clef, setClef] = useState('treble');
   const [root, setRoot] = useState('C');
   const [quality, setQuality] = useState('major');
@@ -37,7 +36,7 @@ export default function ChordCalculator() {
   const handleQualityChange = (e) => setQuality(e.target.value);
 
   const handleClick = () => {
-    const chord = calculateChord(root, accidental, quality, clef)
+    const chord = calculateChord(root, accidental, quality, clef, inversion)
     setNotes(chord);
     if (sound !== 'off') {
       let timeStart = 0;
@@ -76,10 +75,10 @@ export default function ChordCalculator() {
         <FormControl style={styles} >
           <InputLabel id="inverion-label">Inversion</InputLabel>
           <Select id="inversion" labelId="inversion-label" value={inversion} onChange={handleInversionChange}>
-            <MenuItem value="0">root position</MenuItem>
-            <MenuItem value="1">1st inversion</MenuItem>
-            <MenuItem value="2">2nd inversion</MenuItem>
-            {sevenths.includes(quality) ? <MenuItem value="3">3rd inversion</MenuItem> : null}
+            <MenuItem value={0}>root position</MenuItem>
+            <MenuItem value={1}>1st inversion</MenuItem>
+            <MenuItem value={2}>2nd inversion</MenuItem>
+            {sevenths.includes(quality) ? <MenuItem value={3}>3rd inversion</MenuItem> : null}
           </Select>
         </FormControl>
         <FormControl style={styles} >
@@ -91,7 +90,7 @@ export default function ChordCalculator() {
           </Select>
         </FormControl>
         </div>
-        <Button variant='contained' color='primary' onClick={handleClick}>Submit</Button>
+        <Button variant='contained' color='primary' onClick={handleClick}>Calculate</Button>
         <Score notes={notes} numNotes="1"/>
       </div>
     );

@@ -3,8 +3,10 @@
 }
 .content {
   height: calc(100vh - 138.88px);
+  margin: 0 auto;
   margin-top: 138.88px;
   font-size: calc(10px + 2vmin);
+  max-width: 600px;
 }
 
 .form {

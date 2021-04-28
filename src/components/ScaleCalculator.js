@@ -87,7 +87,7 @@ export default function ScaleCalculator() {
                     </Select>
                 </FormControl>
             </div>
-            <Button variant='contained' color='primary' onClick={handleClick}>Submit</Button>
+            <Button variant='contained' color='primary' onClick={handleClick}>Calculate</Button>
             <Score notes={notes} numNotes="8" />
         </div>
     )
