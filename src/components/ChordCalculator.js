@@ -3,8 +3,8 @@ import Score from './Score';
 import RootSelect from './RootSelect';
 import ClefSelect from './ClefSelect';
 import AccidentalSelect from './AccidentalSelect';
-import {alphabet, chordQualities} from './musicConstants'
-import { calculateChord } from './musicFunctions';
+import {chordQualities} from './musicConstants'
+import {calculateChord} from './musicFunctions';
 import * as Tone from 'tone';
 
 import { Button } from '@material-ui/core';
@@ -29,24 +29,15 @@ export default function ChordCalculator() {
   const [quality, setQuality] = useState('major');
   const [accidental, setAccidental] = useState('natural');
 
-  function handleAccidentalChange(e) {
-    setAccidental(e.target.value);
-  }
+  const handleAccidentalChange = (e) => setAccidental(e.target.value);
+  const handleClefChange = (e) => setClef(e.target.value);
+  const handleInversionChange = (e) => setInversion(e.target.value);
+  const handleRootChange = (e) => setRoot(e.target.value);
+  const handleSoundChange = (e) => setSound(e.target.value);
+  const handleQualityChange = (e) => setQuality(e.target.value);
 
-  function handleClefChange(e) {
-    setClef(e.target.value);
-  }
-
-  function handleRootChange(e) {
-    setRoot(e.target.value);
-  }
-
-  function handleInversionChange(e) {
-    setInversion(e.target.value);
-  }
-
-  function handleClick() {
-    const chord = calculateChord(root, accidental, quality, clef, inversion)
+  const handleClick = () => {
+    const chord = calculateChord(root, accidental, quality, clef)
     setNotes(chord);
     if (sound !== 'off') {
       let timeStart = 0;
@@ -61,19 +52,12 @@ export default function ChordCalculator() {
     }  
   }
 
-  function handleSoundChange(e) {
-    setSound(e.target.value);
-  }
-
-  function handleQualityChange(e) {
-    setQuality(e.target.value);
-  }
-
   const styles = {width: '33%'};
+
     return (
       <div className="content">
         <h2>Chord Calculator</h2>
-        <div style={{maxWidth: '720px', margin: 'auto'}}>
+        <div style={{maxWidth: '600px', margin: 'auto'}}>
         <FormControl style={styles} >
           <ClefSelect value={clef} onChange={handleClefChange} />
         </FormControl>

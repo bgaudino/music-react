@@ -2,8 +2,8 @@
   text-align: center;
 }
 .content {
-  height: 100vh;
-  padding: 120px 0;
+  height: calc(100vh - 138.88px);
+  margin-top: 138.88px;
   font-size: calc(10px + 2vmin);
 }
 

@@ -1,18 +1,90 @@
-import {stackedThirds, chordSteps, doubleAccidentals} from './musicConstants';
+import {alphabet, stackedThirds, chordSteps, doubleAccidentals, majorScaleSteps} from './musicConstants';
+
+export function calculateScale(root, clef, accidental, scaleType, mode) {
+
+    let scale = {
+        notes: [...alphabet],
+        steps: [...majorScaleSteps],
+        octaves: [4, 4, 4, 4, 4, 4, 4],
+        vexStr: '',
+        display: '',
+        toneArr: [],
+        clef: clef, 
+    };
+
+    // find appropriate octave for clef
+    let octavesDown = 0;
+    if (clef === 'alto') octavesDown = 1;
+    if (clef === 'bass') octavesDown = 2;
+    if (octavesDown > 0) {
+        scale.octaves = scale.octaves.map(octave => octave - octavesDown);
+    }
+
+    // reorder notes to start on tonic
+    while (root !== scale.notes[0]) {
+        scale.notes.push(scale.notes.shift());
+        scale.steps.push(scale.steps.shift());
+        scale.octaves.push(scale.octaves.shift() + 1);
+    }
+
+    // find steps by scale type
+    let newSteps = []
+    switch (scaleType) {
+        case "major":
+          newSteps = [2, 2, 1, 2, 2, 2, 1];
+          break;
+        case "harmonic minor":
+          newSteps = [2, 1, 2, 2, 1, 3, 1];
+          break;
+        case "melodic minor":
+          newSteps = [2, 1, 2, 2, 2, 2, 1];
+          break;
+        case "harmonic major":
+          newSteps = [2, 2, 1, 2, 1, 3, 1];
+          break;
+        default:
+            break;
+    }
+
+    // adjust for mode
+    for (let i = 0; i < mode; i++) {
+        newSteps.push(newSteps.shift())
+    }
+
+    // add accidentals 
+    scale = addAccidentals(scale, accidental, newSteps);
+
+    // add octave tonic
+    scale.notes.push(scale.notes[0]);
+
+    // format notes for vexflow
+    scale.octaves.push(scale.octaves[0] + 1);
+    for (let i = 0; i < scale.notes.length; i++) {
+        scale.vexStr += scale.notes[i] + scale.octaves[i];
+        scale.toneArr.push(scale.notes[i] + scale.octaves[i]);
+        if (i === 0) scale.vexStr += '/w';
+        scale.display += scale.notes[i];
+        if (i !== scale.notes.length - 1) {
+            scale.display += ' ';
+            scale.vexStr += ', '
+        }
+    }
+
+    return scale;
+
+}
 
 export function calculateChord(root, accidental, quality, clef, inversion) {
     let thirdsFromRoot = [...stackedThirds];
     let stepsFromRoot = [...chordSteps];
 
     // find appropriate octave for clef
-    const octaves = [4, 4, 4, 4, 4, 4, 4];
+    let octaves = [4, 4, 4, 4, 4, 4, 4];
     let octavesDown = 0;
     if (clef === 'alto') octavesDown = 1;
     if (clef === 'bass') octavesDown = 2;
     if (octavesDown > 0) {
-        for (let i = 0; i < octaves.length; i++) {
-            octaves[i] -= octavesDown;
-        }
+        octaves = octaves.map(octave => octave -= octavesDown);
     }
 
     // reorder notes to start on root
@@ -105,7 +177,6 @@ export function calculateChord(root, accidental, quality, clef, inversion) {
         .replaceAll('bb', '𝄫')
         .replaceAll('b', '♭');
     
-    console.log(chord);
     return chord;
 }
 
@@ -184,3 +255,37 @@ function enharmonicRespell(note) {
     }
 }
   
+function addAccidentals(scale, accidental, newSteps) {
+    if (accidental === "sharp") {
+    scale.steps[0]--;
+    scale.notes[0] += "#";
+    if (scale.notes.length > 6) {
+      scale.steps[6]++;
+      scale.notes[7] += "#"
+    }
+
+  } else if (accidental === "flat") {
+    scale.steps[0]++;
+    scale.notes[0] += "b";
+    if (scale.notes.length > 6) {
+      scale.steps[6]--;
+      scale.notes[7] += 'b';
+    }
+  }
+
+    for (let i = 0; i < scale.steps.length; i++) {
+    if (scale.steps[i] === newSteps[i] - 1) {
+      scale.notes[(i + 1) % scale.notes.length] += "#";
+      scale.steps[(i + 1) % scale.steps.length]--;
+    } else if (scale.steps[i] === newSteps[i] - 2) {
+      scale.notes[(i + 1) % scale.notes.length] += "##";
+      scale.steps[(i + 1) % scale.steps.length] -= 2;
+    } else if (scale.steps[i] === newSteps[i] + 1) {
+      scale.notes[(i + 1) % scale.notes.length] += "b";
+      scale.steps[(i + 1) % scale.steps.length]++;
+    } else if (scale.steps[i] === newSteps[i] + 2) {
+      scale.notes[(i + 1) % scale.notes.length] += "bb";
+      scale.steps[(i + 1) % scale.steps.length] += 2;
+    }
+  } return scale;
+}

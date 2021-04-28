@@ -15,8 +15,8 @@ function App() {
 
   return (
     <div className="App">
-      <AppBar >
-        <h1>Practice Room</h1>
+      <AppBar style={{backgroundColor: 'black'}}>
+        <h1>Music Calculators</h1>
         <Tabs 
           value={route} 
           onChange={handleRouteChange}
