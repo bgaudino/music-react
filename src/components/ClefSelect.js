@@ -7,7 +7,7 @@ export default function ClefSelect(props) {
     
     return (
       <FormControl>
-        <InputLabel id="clef-label">Accidental</InputLabel>
+        <InputLabel id="clef-label">Clef</InputLabel>
         <Select labelId="clef-label" id="accidental" value={props.value} onChange={props.onChange}>
           <MenuItem value="treble">𝄞 treble</MenuItem>
           <MenuItem value="alto">𝄡 alto</MenuItem>

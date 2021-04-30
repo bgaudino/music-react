@@ -4,8 +4,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import ChordCalculator from './components/ChordCalculator';
 import ScaleCalculator from './components/ScaleCalculator';
-import IntervalCalculator from './components/IntervalCalculator'
+import IntervalCalculator from './components/IntervalCalculator';
+
 import './App.css';
+import NoteID from './components/NoteID';
 
 function App() {
   const [route, setRoute] = useState('/chords');
@@ -25,11 +27,13 @@ function App() {
           <Tab label='Scale Calculator' value="/scales" />
           <Tab label='Interval Calculator' value="/intervals" />
           <Tab label="Chord Calculator" value="/chords" />
+          <Tab label='Note ID' value="/noteid" />
         </Tabs>
       </AppBar >
       {(route === '/scales') ? <ScaleCalculator className='content'/> : null}
       {(route === '/intervals') ? <IntervalCalculator className='content'/> : null}
       {(route === '/chords') ? <ChordCalculator className='content'/> : null}
+      {(route === '/noteid') ? <NoteID className='content' /> : null}
     </div>
     
   );

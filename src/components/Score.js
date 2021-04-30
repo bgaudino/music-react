@@ -26,7 +26,7 @@ export default function Score(props) {
 
     return (
         <div>
-            <h2>{props.notes.display}</h2>
+            {(props.notes.display !== '') ? <h2>{props.notes.display}</h2> : null}
             <div id="staff">
             </div>
         </div>
