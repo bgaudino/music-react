@@ -3,12 +3,15 @@ import { Button } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import Score from './Score';
 import ClefSelect from './ClefSelect';
+import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
+import axios from 'axios';
 
 export default function NoteID(props) {
 
     const [numAttempts, setNumAttempts] = useState(0);
     const [octaves, setOctaves] = useState(['4', '5']);
+    const [name, setName] = useState('');
     const [notes, setNotes] = useState({
         vexStr: null,
         display: '',
@@ -33,6 +36,10 @@ export default function NoteID(props) {
             octave: range[Math.floor(Math.random() * 2)],
         })
     }
+
+    const onNameChange = (e) => {
+        setName(e.target.value);
+    }
     const makeGuess = (e) => {
         setNumAttempts(numAttempts + 1)
         const newGuess = e.target.innerText;
@@ -49,6 +56,31 @@ export default function NoteID(props) {
         }
     }
 
+    const submitScore = () => {
+        const score = {
+            name: name,
+            numCorrect: numCorrect,
+            numAttempts: numAttempts,
+            pct: numCorrect / numAttempts,
+        }
+
+
+        fetch('https://sheet.best/api/sheets/fa8cefd4-9b56-41da-8404-f1bb6419f02c', {
+            method: 'POST',
+            headers: {
+                'X-API-KEY': 'Rj-G_Fdl-q#fRaEaaC299_ThGg-0zS4HcDWQ4ky3w5J1MmeJ6t-U5rY0adfa8qnG',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(score)
+        })
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
+
+
+        setName('');
+
+    }
     useEffect(() => {
         const octave = octaves[Math.floor(Math.random() * 2)];
         setNotes({...notes,
@@ -56,7 +88,8 @@ export default function NoteID(props) {
             display: '',
             octave: octave
         })
-    }, [currentNote, octaves])
+    }, [])
+    
     return (
         <div className='content'>
             <h2>Note Identification</h2>
@@ -66,7 +99,11 @@ export default function NoteID(props) {
                 <ClefSelect onChange={changeClef} />
             </FormControl>
             {(notes.vexStr !== null) ? <Score notes={notes} numNotes={1} /> : null}
-            {alphabet.map(note => <Button variant='contained' onClick={makeGuess} color='primary'>{note}</Button>)}
+            <div>
+                {alphabet.map(note => <Button variant='contained' onClick={makeGuess} color='primary'>{note}</Button>)}
+            </div>
+            <TextField value={name} onChange={onNameChange}id="standard-basic" label="Name" />
+            <Button onClick={submitScore} variant="contained" color="primary">Submit Score</Button>
         </div>
     )
 }
