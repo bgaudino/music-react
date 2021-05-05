@@ -5,7 +5,6 @@ import Score from './Score';
 import ClefSelect from './ClefSelect';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import axios from 'axios';
 
 export default function NoteID(props) {
 
