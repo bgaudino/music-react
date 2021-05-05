@@ -61,7 +61,7 @@ export default function NoteID(props) {
             name: name,
             numCorrect: numCorrect,
             numAttempts: numAttempts,
-            pct: numCorrect / numAttempts,
+            pct: Math.round((numCorrect / numAttempts) * 100),
         }
 
 
@@ -79,6 +79,8 @@ export default function NoteID(props) {
 
 
         setName('');
+        setNumAttempts(0);
+        setNumCorrect(0);
 
     }
     useEffect(() => {
