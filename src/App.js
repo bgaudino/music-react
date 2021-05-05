@@ -18,7 +18,7 @@ function App() {
 
   return (
     <div className="App">
-      <AppBar style={{backgroundColor: 'black'}}>
+      <AppBar style={{backgroundColor: '#6441a5'}}>
         <h1>Music Calculators</h1>
         <Tabs 
           value={route} 

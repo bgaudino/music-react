@@ -1,6 +1,7 @@
 .App {
   text-align: center;
 }
+
 .content {
   height: calc(100vh - 138.88px);
   margin: 0 auto;
