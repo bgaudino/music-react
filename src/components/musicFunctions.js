@@ -51,11 +51,15 @@ export function calculateScale(root, clef, accidental, scaleType, mode) {
         newSteps.push(newSteps.shift())
     }
 
+    // add octave tonic
+    scale.notes.push(scale.notes[0]);
+
     // add accidentals 
     scale = addAccidentals(scale, accidental, newSteps);
 
-    // add octave tonic
-    scale.notes.push(scale.notes[0]);
+    
+
+    alert(scale.notes);
 
     // format notes for vexflow
     scale.octaves.push(scale.octaves[0] + 1);
