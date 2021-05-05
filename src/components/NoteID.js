@@ -6,6 +6,11 @@ import ClefSelect from './ClefSelect';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 
+const scoreStyles = {
+    display: 'flex',
+    gap: '20px',
+    justifyContent: 'center'
+}
 export default function NoteID(props) {
 
     const [numAttempts, setNumAttempts] = useState(0);
@@ -19,6 +24,8 @@ export default function NoteID(props) {
     })
     const [numCorrect, setNumCorrect] = useState(0);
     const [currentNote, setCurrentNote] = useState(alphabet[Math.floor(Math.random() * (alphabet.length - 1))]);
+    const [PCT, setPCT] = useState(0);
+    const [emoji, setEmoji] = useState(null);
 
     const changeClef = (e) => {
         let range = [4, 5];
@@ -40,19 +47,32 @@ export default function NoteID(props) {
         setName(e.target.value);
     }
     const makeGuess = (e) => {
-        setNumAttempts(numAttempts + 1)
+        let updatedAttempts = numAttempts + 1;
+        let pct = null;
+        setNumAttempts(updatedAttempts);
         const newGuess = e.target.innerText;
         if (newGuess === currentNote) {
             const newNote = alphabet[Math.floor(Math.random() * (alphabet.length - 1))];
             const newOctave = octaves[Math.floor(Math.random() * 2)];
-            setNumCorrect(numCorrect + 1);
+            const updatedCorrect = numCorrect + 1;
+            setNumCorrect(updatedCorrect);
             setCurrentNote(newNote);
             setNotes({...notes,
                 vexStr: newNote + newOctave + '/w',
                 display: '',
                 octave: newOctave,
             })
-        }
+            pct = Math.round((updatedCorrect / updatedAttempts) * 100);
+            setPCT(pct);
+        } else {
+            pct = Math.round((numCorrect / updatedAttempts) * 100);
+            setPCT(pct);
+        } 
+        if (pct > 90) setEmoji('😁');
+        else if (pct > 80) setEmoji('😀');
+        else if (pct > 70) setEmoji('😐');
+        else if (pct > 60) setEmoji('😟');
+        else setEmoji('😭');
     }
 
     const submitScore = () => {
@@ -80,6 +100,8 @@ export default function NoteID(props) {
         setName('');
         setNumAttempts(0);
         setNumCorrect(0);
+        setEmoji(null);
+        setPCT(0);
 
     }
     useEffect(() => {
@@ -88,14 +110,18 @@ export default function NoteID(props) {
             vexStr: currentNote + octave + '/w',
             display: '',
             octave: octave
-        })
+        }) // eslint-disable-next-line
     }, [])
     
     return (
         <div className='content'>
             <h2>Note Identification</h2>
-            <h3>Score</h3>
-            <h3>{numCorrect} / {numAttempts}</h3>
+            <h3 style={scoreStyles}>
+                <span>Score:</span>
+                <span>{numCorrect} / {numAttempts}</span>
+                <span>{PCT}%</span>
+                <span>{emoji}</span>
+            </h3>
             <FormControl style={{width: '120px'}}>
                 <ClefSelect onChange={changeClef} />
             </FormControl>
@@ -103,8 +129,10 @@ export default function NoteID(props) {
             <div>
                 {alphabet.map(note => <Button variant='contained' onClick={makeGuess} color='primary'>{note}</Button>)}
             </div>
-            <TextField value={name} onChange={onNameChange}id="standard-basic" label="Name" />
-            <Button onClick={submitScore} variant="contained" color="primary">Submit Score</Button>
+            <div> 
+                <TextField value={name} onChange={onNameChange}id="standard-basic" label="Name" />
+                <Button onClick={submitScore} variant="contained" color="primary">Submit Score</Button>
+            </div>
         </div>
     )
 }

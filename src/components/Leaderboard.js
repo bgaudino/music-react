@@ -38,10 +38,10 @@ export default function Leaderboard() {
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="left">Name</TableCell>
-                            <TableCell align="center">Correct</TableCell>
-                            <TableCell align="center">Attempts</TableCell>
-                            <TableCell align="center">PCT</TableCell>
+                            <TableCell align="left"><strong>Name</strong></TableCell>
+                            <TableCell align="center"><strong>No. Correct</strong></TableCell>
+                            <TableCell align="center"><strong>Attempts</strong></TableCell>
+                            <TableCell align="center"><strong>PCT</strong></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
