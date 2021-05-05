@@ -8,19 +8,29 @@ import FormControl from '@material-ui/core/FormControl';
 export default function NoteID(props) {
 
     const [numAttempts, setNumAttempts] = useState(0);
+    const [octaves, setOctaves] = useState(['4', '5']);
     const [notes, setNotes] = useState({
         vexStr: null,
         display: '',
-        clef: 'treble'
+        clef: 'treble',
+        octave: '4',
     })
     const [numCorrect, setNumCorrect] = useState(0);
     const [currentNote, setCurrentNote] = useState(alphabet[Math.floor(Math.random() * (alphabet.length - 1))]);
 
     const changeClef = (e) => {
+        let range = [4, 5];
+        if (e.target.value === 'alto') {
+            range = [3, 4];
+        } else if (e.target.value === 'bass') {
+            range = [2, 3]
+        }
+        setOctaves(range);
         setNotes({
             vexStr: currentNote + '4/w',
             display: '',
-            clef: e.target.value
+            clef: e.target.value,
+            octave: range[Math.floor(Math.random() * 2)],
         })
     }
     const makeGuess = (e) => {
@@ -28,23 +38,25 @@ export default function NoteID(props) {
         const newGuess = e.target.innerText;
         if (newGuess === currentNote) {
             const newNote = alphabet[Math.floor(Math.random() * (alphabet.length - 1))];
+            const newOctave = octaves[Math.floor(Math.random() * 2)];
             setNumCorrect(numCorrect + 1);
             setCurrentNote(newNote);
-            setNotes({
-                vexStr: newNote + '4/w',
+            setNotes({...notes,
+                vexStr: newNote + newOctave + '/w',
                 display: '',
-                clef: 'treble'
+                octave: newOctave,
             })
         }
     }
 
     useEffect(() => {
-        setNotes({
-            vexStr: currentNote + '4/w',
+        const octave = octaves[Math.floor(Math.random() * 2)];
+        setNotes({...notes,
+            vexStr: currentNote + octave + '/w',
             display: '',
-            clef: 'treble'
+            octave: octave
         })
-    }, [currentNote])
+    }, [currentNote, octaves])
     return (
         <div className='content'>
             <h2>Note Identification</h2>

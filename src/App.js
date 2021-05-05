@@ -24,9 +24,9 @@ function App() {
           value={route} 
           onChange={handleRouteChange}
           centered>
-          <Tab label='Scale Calculator' value="/scales" />
-          <Tab label='Interval Calculator' value="/intervals" />
-          <Tab label="Chord Calculator" value="/chords" />
+          <Tab label='Scales' value="/scales" />
+          <Tab label='Intervals' value="/intervals" />
+          <Tab label="Chords" value="/chords" />
           <Tab label='Note ID' value="/noteid" />
         </Tabs>
       </AppBar >
