@@ -382,3 +382,25 @@ function addAccidentals(scale, accidental, newSteps) {
     }
   } return scale;
 }
+
+export function randomInterval() {
+
+    const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    let range = [];
+    for (let i = 2; i < 6; i++) {
+        notes.forEach(note => range.push(note + String(i)));
+    }
+    const lowIndex = Math.floor(Math.random() * (range.length - 13));
+    const interval = Math.floor(Math.random() * 13);
+    const highIndex = lowIndex + interval;
+    let intervalNotes = [range[lowIndex], range[highIndex]]
+    console.log(intervalNotes);
+
+    return {
+        notes: intervalNotes,
+        interval: interval
+    }
+
+}
+
+randomInterval();

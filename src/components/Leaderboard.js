@@ -7,11 +7,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { Button } from '@material-ui/core';
 
 export default function Leaderboard() {
 
     const [rows, setRows] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [game, setGame] = useState('Note ID');
 
     useEffect(() => {
         fetch('https://sheet.best/api/sheets/fa8cefd4-9b56-41da-8404-f1bb6419f02c')
@@ -23,6 +25,20 @@ export default function Leaderboard() {
         .catch(err => console.log(err));
     }, [])
 
+    const filterByGame = (game) => {
+        setGame(game);
+        const buttons = Array.from(document.querySelectorAll('.toggle'));
+        buttons.forEach(button => {
+            if (button.innerText === game.toUpperCase()) {
+                button.style.backgroundColor = '#6441a5';
+                button.style.color = 'white';
+            } else {
+                button.style.backgroundColor = 'inherit';
+                button.style.color = 'black';
+            }
+        })
+    }
+    
     if (!isLoaded) {
         return (
             <div className="content">
@@ -34,6 +50,11 @@ export default function Leaderboard() {
     return (
         <div className="content">
             <h2>Leaderboard</h2>
+            <div>
+                <Button style={{'color': 'white', 'backgroundColor': '#6441a5'}}className = 'toggle' onClick={() => filterByGame('Note ID')}>Note ID</Button> 
+                | 
+                <Button className = 'toggle' onClick={() => filterByGame('Interval ET')}>Interval ET</Button>
+            </div>
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                     <TableHead>
@@ -45,16 +66,20 @@ export default function Leaderboard() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow key={row.name}>
-                                <TableCell component="th" cope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="center">{row.numCorrect}</TableCell>
-                                <TableCell align="center">{row.numAttempts}</TableCell>
-                                <TableCell align="center">{row.pct}%</TableCell>
-                            </TableRow>
-                        ))}
+                        {rows.map((row) => {
+                            if (row.game === game) {
+                                return (
+                                    <TableRow key={row.name}>
+                                        <TableCell component="th" cope="row">
+                                            {row.name}
+                                        </TableCell>
+                                        <TableCell align="center">{row.numCorrect}</TableCell>
+                                        <TableCell align="center">{row.numAttempts}</TableCell>
+                                        <TableCell align="center">{row.pct}%</TableCell>
+                                    </TableRow>
+                                );
+                            }  
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>

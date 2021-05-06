@@ -60,6 +60,7 @@ export const modes = {
 }
 export const intervals = {
     genericIntervals: ['unison', '2nd', '3rd', '4th', '5th', '6th', '7th', 'octave'],
+    abbreviations: ['P1', 'm2', 'M2', 'm3', 'M3', 'P4', 'TT', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8'],
     imperfectIntervals: [1, 2, 5, 6],
     imperfectQualities: ['major', 'minor'],
     perfectIntervals: [0, 3, 4, 7],

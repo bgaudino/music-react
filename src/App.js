@@ -5,6 +5,7 @@ import Tab from '@material-ui/core/Tab';
 import ChordCalculator from './components/ChordCalculator';
 import ScaleCalculator from './components/ScaleCalculator';
 import IntervalCalculator from './components/IntervalCalculator';
+import IntervalET from './components/IntervalET';
 import Leaderboard from './components/Leaderboard'
 import './App.css';
 import NoteID from './components/NoteID';
@@ -28,6 +29,7 @@ function App() {
           <Tab label='Intervals' value="/intervals" />
           <Tab label="Chords" value="/chords" />
           <Tab label='Note ID' value="/noteid" />
+          <Tab label='Interval ET' value="/intervalET" />
           <Tab label='Leaderboard' value="/leaderboard" />
         </Tabs>
       </AppBar >
@@ -35,6 +37,7 @@ function App() {
       {(route === '/intervals') ? <IntervalCalculator className='content'/> : null}
       {(route === '/chords') ? <ChordCalculator className='content'/> : null}
       {(route === '/noteid') ? <NoteID className='content' /> : null}
+      {(route === '/intervalET') ? <IntervalET className='content' />:  null}
       {(route === '/leaderboard') ? <Leaderboard /> : null}
     </div>
     

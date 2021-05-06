@@ -81,6 +81,7 @@ export default function NoteID(props) {
             numCorrect: numCorrect,
             numAttempts: numAttempts,
             pct: Math.round((numCorrect / numAttempts) * 100),
+            game: 'Note ID',
         }
 
 
@@ -130,7 +131,7 @@ export default function NoteID(props) {
                 {alphabet.map(note => <Button variant='contained' onClick={makeGuess} color='primary'>{note}</Button>)}
             </div>
             <div> 
-                <TextField value={name} onChange={onNameChange}id="standard-basic" label="Name" />
+                <TextField value={name} onChange={onNameChange} id="standard-basic" label="Name" />
                 <Button onClick={submitScore} variant="contained" color="primary">Submit Score</Button>
             </div>
         </div>
