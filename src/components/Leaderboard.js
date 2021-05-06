@@ -78,7 +78,9 @@ export default function Leaderboard() {
                                         <TableCell align="center">{row.pct}%</TableCell>
                                     </TableRow>
                                 );
-                            }  
+                            } else {
+                                return null;
+                            }
                         })}
                     </TableBody>
                 </Table>
