@@ -6,3 +6,16 @@ body {
   background-color: #f0f8ff;
 }
 
+#mobile {
+  display: none;
+}
+
+@media (max-width: 720px) {
+
+  #mobile {
+    display: block;
+  } 
+  #tabs {
+    display: none;
+  }
+}

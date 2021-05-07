@@ -9,36 +9,45 @@ import IntervalET from './components/IntervalET';
 import Leaderboard from './components/Leaderboard'
 import './App.css';
 import NoteID from './components/NoteID';
+import SimpleMenu from './components/SimpleMenu';
 
 function App() {
-  const [route, setRoute] = useState('/chords');
+  const [route, setRoute] = useState('Scale Calculator');
 
   function handleRouteChange(e, newValue) {
     setRoute(newValue);
   }
 
+  function onClick(e) {
+    setRoute(e.target.innerText);
+  }
+
   return (
     <div className="App">
-      <AppBar style={{backgroundColor: '#6441a5'}}>
+      <AppBar style={{backgroundImage: 'linear-gradient(to right, #6441a5, #2a0845)'}}>
         <h1>Practice Room 2.0</h1>
-        <Tabs 
+        <Tabs id="tabs"
           value={route} 
           onChange={handleRouteChange}
           centered>
-          <Tab label='Scales' value="/scales" />
-          <Tab label='Intervals' value="/intervals" />
-          <Tab label="Chords" value="/chords" />
-          <Tab label='Note ID' value="/noteid" />
-          <Tab label='Interval ET' value="/intervalET" />
-          <Tab label='Leaderboard' value="/leaderboard" />
-        </Tabs>
+          <Tab label='Scales' value="Scale Calculator" />
+          <Tab label='Intervals' value="Interval Calculator" />
+          <Tab label="Chords" value="Chord Calculator" />
+          <Tab label='Note ID' value="Note Identification" />
+          <Tab label='Eartraining' value="Interval Eartraining" />
+          <Tab label='Leaderboard' value="Leaderboard" />
+        </Tabs> 
+        <SimpleMenu onClick={onClick} />
+
       </AppBar >
-      {(route === '/scales') ? <ScaleCalculator className='content'/> : null}
-      {(route === '/intervals') ? <IntervalCalculator className='content'/> : null}
-      {(route === '/chords') ? <ChordCalculator className='content'/> : null}
-      {(route === '/noteid') ? <NoteID className='content' /> : null}
-      {(route === '/intervalET') ? <IntervalET className='content' />:  null}
-      {(route === '/leaderboard') ? <Leaderboard /> : null}
+      
+      {(route === 'Scale Calculator') ? <ScaleCalculator className='content'/> : null}
+      {(route === 'Interval Calculator') ? <IntervalCalculator className='content'/> : null}
+      {(route === 'Chord Calculator') ? <ChordCalculator className='content'/> : null}
+      {(route === 'Note Identification') ? <NoteID className='content' /> : null}
+      {(route === 'Interval Eartraining') ? <IntervalET className='content' />:  null}
+      {(route === 'Leaderboard') ? <Leaderboard /> : null}
+
     </div>
     
   );

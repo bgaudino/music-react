@@ -18,3 +18,11 @@
 .FormControl {
   width: 100%;
 }
+
+@media (max-width: 720px) {
+  
+  .tab {
+    display: none;
+  }
+
+}
