@@ -19,7 +19,7 @@ function App() {
   }
 
   function onClick(e) {
-    setRoute(e.target.innerText);
+    if (e.target.innerText) setRoute(e.target.innerText);
   }
 
   return (

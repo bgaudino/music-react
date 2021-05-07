@@ -8,6 +8,11 @@ import * as Tone from 'tone';
 const btnStyle = {
     textTransform: 'none'
 };
+const scoreStyles = {
+    display: 'flex',
+    gap: '20px',
+    justifyContent: 'center'
+}
 
 const IntervalButtons = (props) => {
     return (
@@ -31,6 +36,7 @@ export default function IntervalET() {
     const [name, setName] = useState('');
     const [notes, setNotes] = useState([]);
     const [isStarted, setIsStarted] = useState(false);
+    const [emoji, setEmoji] = useState(null);
 
     const play = notes => {
         let timeStart = 0;
@@ -48,24 +54,34 @@ export default function IntervalET() {
     const onClick = (item, list) => {
         const updatedAttempts = score.numAttempts + 1;
         const guess = list.indexOf(item);
+
+        let pct = null;
         if (guess === interval) {
             const updatedCorrect = score.numCorrect + 1;
+            pct = Math.round((updatedCorrect / updatedAttempts) * 100)
             setScore({
                 numCorrect: updatedCorrect,
                 numAttempts: updatedAttempts,
-                pct: Math.round((updatedCorrect / updatedAttempts) * 100),
+                pct: pct,
             })
             const result = randomInterval();
             setInterval(result.interval);
             play(result.notes);
             setNotes(result.notes);
         } else {
+            pct = Math.round((score.numCorrect / updatedAttempts) * 100);
             setScore({
                 numCorrect: score.numCorrect,
                 numAttempts: updatedAttempts,
                 pct: Math.round((score.numCorrect / updatedAttempts) * 100),
             })
         }
+
+        if (pct > 90) setEmoji('😁');
+        else if (pct > 80) setEmoji('😀');
+        else if (pct > 70) setEmoji('😐');
+        else if (pct > 60) setEmoji('😟');
+        else setEmoji('😭');
     }
 
     const start = () => {
@@ -115,7 +131,12 @@ export default function IntervalET() {
     return (
         <div className="content">
             <h2>Interval Ear Training</h2>
-            <h3>Score: {score.numCorrect} / {score.numAttempts} {score.pct}%</h3>
+            <h3 style={scoreStyles}>
+                <span>Score:</span>
+                <span>{score.numCorrect} / {score.numAttempts}</span>
+                <span>{score.pct}%</span>
+                <span>{emoji}</span>
+            </h3>
             {(!isStarted) ? <div><Button variant="contained" color="primary" onClick={start}>Start</Button></div> : <IntervalButtons intervals={intervals.abbreviations} onClick={onClick} />}
             {(isStarted) ?
                 <div>

@@ -387,7 +387,7 @@ export function randomInterval() {
 
     const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     let range = [];
-    for (let i = 2; i < 6; i++) {
+    for (let i = 3; i < 6; i++) {
         notes.forEach(note => range.push(note + String(i)));
     }
     const lowIndex = Math.floor(Math.random() * (range.length - 13));
