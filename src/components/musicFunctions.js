@@ -59,7 +59,6 @@ export function calculateScale(root, clef, accidental, scaleType, mode) {
 
     
 
-    alert(scale.notes);
 
     // format notes for vexflow
     scale.octaves.push(scale.octaves[0] + 1);
@@ -394,7 +393,6 @@ export function randomInterval() {
     const interval = Math.floor(Math.random() * 13);
     const highIndex = lowIndex + interval;
     let intervalNotes = [range[lowIndex], range[highIndex]]
-    console.log(intervalNotes);
 
     return {
         notes: intervalNotes,
