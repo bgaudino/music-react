@@ -94,7 +94,10 @@ export default function NoteID(props) {
             body: JSON.stringify(score)
         })
         .then(response => response.json())
-        .then(response => console.log(response))
+        .then(response => {
+            console.log(response);
+            props.setRoute('Leaderboard');
+        })
         .catch(error => console.log(error));
 
 

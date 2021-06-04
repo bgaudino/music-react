@@ -26,7 +26,7 @@ const IntervalButtons = (props) => {
     )
 }
 
-export default function IntervalET() {
+export default function IntervalET(props) {
     const [interval, setInterval] = useState(null);
     const [score, setScore] = useState({
         numCorrect: 0,
@@ -117,7 +117,11 @@ export default function IntervalET() {
             body: JSON.stringify(finalScore)
         })
         .then(response => response.json())
-        .then(response => console.log(response))
+        .then(response => {
+            console.log(response);
+            props.setGame('Interval ET');
+            props.setRoute('Leaderboard');
+        })
         .catch(error => console.log(error));
 
         setName('');

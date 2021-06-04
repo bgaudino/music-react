@@ -13,7 +13,7 @@ import SimpleMenu from './components/SimpleMenu';
 
 function App() {
   const [route, setRoute] = useState('Scale Calculator');
-
+  const [game, setGame] = useState('');
   function handleRouteChange(e, newValue) {
     setRoute(newValue);
   }
@@ -44,9 +44,9 @@ function App() {
       {(route === 'Scale Calculator') ? <ScaleCalculator className='content'/> : null}
       {(route === 'Interval Calculator') ? <IntervalCalculator className='content'/> : null}
       {(route === 'Chord Calculator') ? <ChordCalculator className='content'/> : null}
-      {(route === 'Note Identification') ? <NoteID className='content' /> : null}
-      {(route === 'Interval Eartraining') ? <IntervalET className='content' />:  null}
-      {(route === 'Leaderboard') ? <Leaderboard /> : null}
+      {(route === 'Note Identification') ? <NoteID setRoute={setRoute} setGame={setGame} className='content' /> : null}
+      {(route === 'Interval Eartraining') ? <IntervalET setRoute={setRoute} setGame={setGame} className='content' />:  null}
+      {(route === 'Leaderboard') ? <Leaderboard game={game}/> : null}
 
     </div>
     

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,18 +9,21 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button } from '@material-ui/core';
 
-export default function Leaderboard() {
+export default function Leaderboard(props) {
 
     const [rows, setRows] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [game, setGame] = useState('Note ID');
+    const [game, setGame] = useState(props.game);
+    const btn = useRef(null);
 
     useEffect(() => {
+        if (!game) setGame(() => 'Note ID');
         fetch('https://sheet.best/api/sheets/fa8cefd4-9b56-41da-8404-f1bb6419f02c')
         .then(res => res.json())
         .then(data => {
-            setRows(data);
+            setRows(data.sort((a, b) => b.numCorrect - a.numCorrect));
             setIsLoaded(true);
+            (game) ?  filterByGame(game) : filterByGame('Note ID');
         })
         .catch(err => console.log(err));
     }, [])
@@ -51,9 +54,9 @@ export default function Leaderboard() {
         <div className="content">
             <h2>Leaderboard</h2>
             <div>
-                <Button style={{'color': 'white', 'backgroundColor': '#6441a5'}}className = 'toggle' onClick={() => filterByGame('Note ID')}>Note ID</Button> 
+                <Button className = 'toggle' onClick={() => filterByGame('Note ID')}>Note ID</Button> 
                 | 
-                <Button className = 'toggle' onClick={() => filterByGame('Interval ET')}>Interval ET</Button>
+                <Button  className = 'toggle' onClick={() => filterByGame('Interval ET')}>Interval ET</Button>
             </div>
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
