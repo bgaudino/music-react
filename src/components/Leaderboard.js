@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,7 +14,6 @@ export default function Leaderboard(props) {
     const [rows, setRows] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [game, setGame] = useState(props.game);
-    const btn = useRef(null);
 
     useEffect(() => {
         if (!game) setGame(() => 'Note ID');
@@ -26,6 +25,7 @@ export default function Leaderboard(props) {
             (game) ?  filterByGame(game) : filterByGame('Note ID');
         })
         .catch(err => console.log(err));
+// eslint-disable-next-line
     }, [])
 
     const filterByGame = (game) => {
