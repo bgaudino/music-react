@@ -393,7 +393,6 @@ export function randomInterval() {
     const interval = Math.floor(Math.random() * 13);
     const highIndex = lowIndex + interval;
     let intervalNotes = [range[lowIndex], range[highIndex]]
-
     return {
         notes: intervalNotes,
         interval: interval

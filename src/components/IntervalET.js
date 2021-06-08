@@ -4,6 +4,12 @@ import { Button } from '@material-ui/core';
 import { randomInterval } from './musicFunctions';
 import TextField from '@material-ui/core/TextField';
 import * as Tone from 'tone';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
+
+
 
 const btnStyle = {
     textTransform: 'none'
@@ -37,10 +43,15 @@ export default function IntervalET(props) {
     const [notes, setNotes] = useState([]);
     const [isStarted, setIsStarted] = useState(false);
     const [emoji, setEmoji] = useState(null);
+    const [playMode, setPlayMode] = useState('ascending');
+
+    const onPlayModeChange = (e) => setPlayMode(e.target.value);
 
     const play = notes => {
+        if (playMode === 'descending') notes = notes.reverse();
         let timeStart = 0;
         let timeAdd = 0.5;
+        if (playMode === 'simultaneous') timeAdd = 0;
         const synth = new Tone.PolySynth(Tone.Synth).toDestination();
         const now = Tone.now();
         notes.forEach(note => {
@@ -48,9 +59,11 @@ export default function IntervalET(props) {
             timeStart += timeAdd;
         });
     }
+
     const onNameChange = (e) => {
         setName(e.target.value);
     }
+
     const onClick = (item, list) => {
         const updatedAttempts = score.numAttempts + 1;
         const guess = list.indexOf(item);
@@ -141,6 +154,15 @@ export default function IntervalET(props) {
                 <span>{score.pct}%</span>
                 <span>{emoji}</span>
             </h3>
+            <FormControl>
+                <InputLabel id="play-mode-label">Accidental</InputLabel>
+                <Select value={playMode} labelId="play-mode-label" id="play-mode" onChange={onPlayModeChange}>
+                    <MenuItem value="ascending">ascending</MenuItem>
+                    <MenuItem value="descending">descending</MenuItem>
+                    <MenuItem value="simultaneous">simultaneous</MenuItem>
+                </Select>
+            </FormControl>
+
             {(!isStarted) ? <div><Button variant="contained" color="primary" onClick={start}>Start</Button></div> : <IntervalButtons intervals={intervals.abbreviations} onClick={onClick} />}
             {(isStarted) ?
                 <div>
