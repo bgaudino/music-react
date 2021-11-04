@@ -4,7 +4,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Link } from "react-router-dom";
 
-export default function SimpleMenu(props) {
+export default function SimpleMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -13,7 +13,6 @@ export default function SimpleMenu(props) {
 
   const handleClose = (e) => {
     setAnchorEl(null);
-    props.onClick(e);
   };
 
   const styles = {

@@ -13,15 +13,7 @@ import SimpleMenu from "./components/SimpleMenu";
 import { BrowserRouter, Link, Switch, Route, Redirect } from "react-router-dom";
 
 function App() {
-  const [route, setRoute] = useState("Scale Calculator");
-  const [game, setGame] = useState("");
-  function handleRouteChange(e, newValue) {
-    setRoute(newValue);
-  }
-
-  function onClick(e) {
-    if (e.target.innerText) setRoute(e.target.innerText);
-  }
+  const [value, setValue] = useState("Scale Calculator");
 
   return (
     <div className="App">
@@ -32,27 +24,57 @@ function App() {
           }}
         >
           <h1>Practice Room 2.0</h1>
-          <Tabs id="tabs" value={route} onChange={handleRouteChange} centered>
+          <Tabs id="tabs" centered>
             <Link to="/scale-calculator">
-              <Tab label="Scales" value="Scale Calculator" />
+              <Tab
+                selected={value === "Scale Calculator"}
+                label="Scales"
+                value="Scale Calculator"
+                onChange={() => setValue("Scale Calculator")}
+              />
             </Link>
             <Link color="primary" to="/interval-calculator">
-              <Tab label="Intervals" value="Interval Calculator" />
+              <Tab
+                selected={value === "Interval Calculator"}
+                label="Intervals"
+                value="Interval Calculator"
+                onChange={() => setValue("Interval Calculator")}
+              />
             </Link>
             <Link to="/chord-calculator">
-              <Tab label="Chords" value="Chord Calculator" />
+              <Tab
+                selected={value === "Chord Calculator"}
+                label="Chords"
+                value="Chord Calculator"
+                onChange={() => setValue("Chord Calculator")}
+              />
             </Link>
             <Link to="/note-id">
-              <Tab label="Note ID" value="Note Identification" />
+              <Tab
+                selected={value === "Note Identification"}
+                label="Note ID"
+                value="Note Identification"
+                onChange={() => setValue("Note Identification")}
+              />
             </Link>
             <Link to="/interval-eartraining">
-              <Tab label="Eartraining" value="Interval Eartraining" />
+              <Tab
+                selected={value === "Interval Eartraining"}
+                label="Eartraining"
+                value="Interval Eartraining"
+                onChange={() => setValue("Interval Eartraining")}
+              />
             </Link>
             <Link to="/leaderboard">
-              <Tab label="Leaderboard" value="Leaderboard" />
+              <Tab
+                selected={value === "Leaderboard"}
+                label="Leaderboard"
+                value="Leaderboard"
+                onChange={() => setValue("Leaderboard")}
+              />
             </Link>
           </Tabs>
-          <SimpleMenu onClick={onClick} />
+          <SimpleMenu />
         </AppBar>
         <Switch>
           <Route path="/scale-calculator" component={ScaleCalculator} />
