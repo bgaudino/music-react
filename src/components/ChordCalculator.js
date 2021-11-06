@@ -3,8 +3,8 @@ import Score from './Score';
 import RootSelect from './RootSelect';
 import ClefSelect from './ClefSelect';
 import AccidentalSelect from './AccidentalSelect';
-import {chordQualities, sevenths} from './musicConstants'
-import {calculateChord} from './musicFunctions';
+import {chordQualities, sevenths} from '../utils/musicConstants'
+import {calculateChord} from '../utils/musicFunctions';
 import * as Tone from 'tone';
 
 import { Button } from '@material-ui/core';

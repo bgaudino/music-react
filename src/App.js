@@ -1,27 +1,39 @@
 import { useState } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import { AppBar, Tabs, Tab, createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
+
 import ChordCalculator from "./components/ChordCalculator";
 import ScaleCalculator from "./components/ScaleCalculator";
 import IntervalCalculator from "./components/IntervalCalculator";
 import IntervalET from "./components/IntervalET";
 import Leaderboard from "./components/Leaderboard";
-import "./App.css";
 import NoteID from "./components/NoteID";
+import Layout from "./components/Layout";
 import SimpleMenu from "./components/SimpleMenu";
 import { BrowserRouter, Link, Switch, Route, Redirect } from "react-router-dom";
+
+const theme = createMuiTheme({
+  background: {
+    default: "#f5f5f5",
+  },
+  palette: {
+    primary: {
+      main: "#ff00ff",
+    },
+  },
+});
 
 function App() {
   const [value, setValue] = useState("Scale Calculator");
 
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <AppBar
-          style={{
-            backgroundImage: "linear-gradient(to right, #6441a5, #2a0845)",
-          }}
+          position="sticky"
+          // style={{
+          //   backgroundImage: "linear-gradient(to right, #6441a5, #2a0845)",
+          // }}
         >
           <h1>Practice Room 2.0</h1>
           <Tabs id="tabs" centered>
@@ -77,16 +89,18 @@ function App() {
           <SimpleMenu />
         </AppBar>
         <Switch>
-          <Route path="/scale-calculator" component={ScaleCalculator} />
-          <Route path="/interval-calculator" component={IntervalCalculator} />
-          <Route path="/chord-calculator" component={ChordCalculator} />
-          <Route path="/note-id" component={NoteID} />
-          <Route path="/interval-eartraining" component={IntervalET} />
-          <Route path="/leaderboard" component={Leaderboard} />
-          <Redirect from="/" to="/scale-calculator" />
+          <Layout>
+            <Route path="/scale-calculator" component={ScaleCalculator} />
+            <Route path="/interval-calculator" component={IntervalCalculator} />
+            <Route path="/chord-calculator" component={ChordCalculator} />
+            <Route path="/note-id" component={NoteID} />
+            <Route path="/interval-eartraining" component={IntervalET} />
+            <Route path="/leaderboard" component={Leaderboard} />
+            <Redirect from="/" to="/scale-calculator" />
+          </Layout>
         </Switch>
       </BrowserRouter>
-    </div>
+    </ThemeProvider>
   );
 }
 

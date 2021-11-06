@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { intervals } from './musicConstants';
+import { intervals } from '../utils/musicConstants';
 import { Button } from '@material-ui/core';
-import { randomInterval } from './musicFunctions';
+import { randomInterval } from '../utils/musicFunctions';
 import TextField from '@material-ui/core/TextField';
 import * as Tone from 'tone';
 import Select from '@material-ui/core/Select';
