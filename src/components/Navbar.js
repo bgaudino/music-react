@@ -2,11 +2,9 @@ import {
   AppBar,
   Box,
   Toolbar,
-  IconButton,
   Typography,
   useMediaQuery,
 } from "@material-ui/core";
-import { Menu as MenuIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import SimpleMenu from "./SimpleMenu";
 

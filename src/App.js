@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import ChordCalculator from "./components/pages/ChordCalculator";
@@ -8,7 +7,7 @@ import IntervalET from "./components/pages/IntervalET";
 import Leaderboard from "./components/pages/Leaderboard";
 import NoteID from "./components/pages/NoteID";
 import Layout from "./components/Layout";
-import { BrowserRouter, Link, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Navbar from "./components/Navbar";
 
 const theme = createMuiTheme({
@@ -20,8 +19,6 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [value, setValue] = useState("Scale Calculator");
-
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
