@@ -1,41 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import Vex from "vexflow";
 import { Card } from "@material-ui/core";
-import { Slide } from "@material-ui/core";
 
 export default function Score(props) {
+  const { numNotes, clef, vexStr, display } = props.notes;
+  const staffRef = useRef(null);
+
   useEffect(() => {
     if (!props) return;
-    const staff = document.getElementById("staff");
+    console.log(staffRef.current);
+    const staff = staffRef.current;
     staff.innerHTML = "";
-    const VF = Vex.Flow;
-    var vf = new VF.Factory({ renderer: { elementId: "staff" } });
-    var score = vf.EasyScore();
-    var system = vf.System();
-    score.set({ time: props.numNotes + "/1" });
+    const vf = new Vex.Flow.Factory({ renderer: { elementId: "staff" } });
+    const score = vf.EasyScore();
+    const system = vf.System();
+    score.set({ time: `${numNotes}/1` });
     system
       .addStave({
         voices: [
           score.voice(
-            score.notes(props.notes.vexStr, {
-              clef: props.notes.clef,
+            score.notes(vexStr, {
+              clef: clef,
               key: "C",
             })
           ),
         ],
       })
-      .addClef(props.notes.clef);
+      .addClef(clef);
     vf.draw();
-  }, [props]);
-
-  if (!props) return null;
+  }, [props, numNotes, clef, vexStr]);
 
   return (
-    <Slide in={true} direction="up" timeout={500}>
-      <Card>
-        {props.notes.display !== "" ? <h2>{props.notes.display}</h2> : null}
-        <div id="staff"></div>
-      </Card>
-    </Slide>
+    <Card>
+      <h2>{display}</h2>
+      <div ref={staffRef} id="staff"></div>
+    </Card>
   );
 }

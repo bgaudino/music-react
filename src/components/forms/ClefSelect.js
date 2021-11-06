@@ -2,25 +2,21 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
-import { alphabet } from "../utils/musicConstants";
-import { FormItem } from "./Layout";
+import { FormItem } from "../Layout";
 
-export default function RootSelect(props) {
+export default function ClefSelect(props) {
   return (
     <FormItem>
       <FormControl fullWidth>
-        <InputLabel id="root-label">Root</InputLabel>
+        <InputLabel id="clef-label">Clef</InputLabel>
         <Select
-          labelId="root-label"
-          id="root"
+          labelId="clef-label"
           value={props.value}
           onChange={props.onChange}
         >
-          {alphabet.map((note) => (
-            <MenuItem key={note} value={note}>
-              {note}
-            </MenuItem>
-          ))}
+          <MenuItem value="treble">𝄞 treble</MenuItem>
+          <MenuItem value="alto">𝄡 alto</MenuItem>
+          <MenuItem value="bass">𝄢 bass</MenuItem>
         </Select>
       </FormControl>
     </FormItem>

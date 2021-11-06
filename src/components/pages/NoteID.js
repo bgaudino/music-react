@@ -1,8 +1,8 @@
-import { alphabet } from '../utils/musicConstants';
+import { alphabet } from '../../utils/musicConstants';
 import { Button } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import Score from './Score';
-import ClefSelect from './ClefSelect';
+import Score from '../Score';
+import ClefSelect from '../forms/ClefSelect';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 

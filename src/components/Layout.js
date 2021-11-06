@@ -7,6 +7,8 @@ export default function Layout(props) {
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
+          padding: "1rem",
+          gap: "1rem",
         }}
       >
         {props.children}
@@ -20,7 +22,7 @@ export function FormItem(props) {
   return (
     <Box
       style={{
-        padding: "1rem",
+        padding: isMobile ? 0 : "0 0.5rem",
         gridColumn: isMobile ? "span 3" : "span 1",
       }}
     >

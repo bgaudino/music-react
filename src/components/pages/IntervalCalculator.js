@@ -1,15 +1,16 @@
 import { useState } from "react";
-import Score from "./Score";
-import ClefSelect from "./ClefSelect";
-import RootSelect from "./RootSelect";
-import AccidentalSelect from "./AccidentalSelect";
+import Score from "../Score";
+import ClefSelect from "../forms/ClefSelect";
+import RootSelect from "../forms/RootSelect";
+import AccidentalSelect from "../forms/AccidentalSelect";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Button } from "@material-ui/core";
-import { intervals } from "../utils/musicConstants";
-import { calculateInterval } from "../utils/musicFunctions";
+import { intervals } from "../../utils/musicConstants";
+import { calculateInterval } from "../../utils/musicFunctions";
+import { FormItem } from "../Layout";
 import * as Tone from "tone";
 
 const styles = { width: "33%" };
@@ -65,37 +66,30 @@ export default function IntervalCalculator() {
 
   return (
     <>
-      <h2>Interval Calculator</h2>
-      <FormControl style={styles}>
-        <ClefSelect value={clef} onChange={handleClefChange} />
-      </FormControl>
-      <FormControl style={styles}>
-        <RootSelect value={root} onChange={handleRootChange} />
-      </FormControl>
-      <FormControl style={styles}>
-        <AccidentalSelect
-          value={accidental}
-          onChange={handleAccidentalChange}
-        />
-      </FormControl>
-      <FormControl style={styles}>
-        <InputLabel id="interval-label">Interval</InputLabel>
-        <Select
-          id="interval"
-          labelId="interval-label"
-          value={genericInterval}
-          onChange={handleIntervalChange}
-        >
-          {intervals.genericIntervals.map((interval) => (
-            <MenuItem
-              key={interval}
-              value={intervals.genericIntervals.indexOf(interval)}
-            >
-              {interval}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <h2 style={{ gridColumn: "span 3", textAlign: "center" }}>Interval Calculator</h2>
+      <ClefSelect value={clef} onChange={handleClefChange} />
+      <RootSelect value={root} onChange={handleRootChange} />
+      <AccidentalSelect value={accidental} onChange={handleAccidentalChange} />
+      <FormItem>
+        <FormControl style={styles}>
+          <InputLabel id="interval-label">Interval</InputLabel>
+          <Select
+            id="interval"
+            labelId="interval-label"
+            value={genericInterval}
+            onChange={handleIntervalChange}
+          >
+            {intervals.genericIntervals.map((interval) => (
+              <MenuItem
+                key={interval}
+                value={intervals.genericIntervals.indexOf(interval)}
+              >
+                {interval}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </FormItem>
       <FormControl style={styles}>
         <InputLabel id="quality-label">Quality</InputLabel>
         <Select
