@@ -1,6 +1,7 @@
 import {
   AppBar,
   Box,
+  Container,
   Toolbar,
   Typography,
   useMediaQuery,
@@ -13,34 +14,39 @@ export default function Navbar() {
 
   return (
     <AppBar color="transparent" position="static">
-      <Toolbar>
-        {isTablet && <SimpleMenu />}
-        <Link to="/scale-calculator" style={{ textDecoration: "unset", color: "unset" }}>
-          <Typography
-            variant="h6"
-            style={{ cursor: "pointer" }}
-            // onClick={() => window.location.assign("/")}
+      <Container maxWidth="lg">
+        <Toolbar>
+          {isTablet && <SimpleMenu />}
+          <Link
+            to="/scale-calculator"
+            style={{ textDecoration: "unset", color: "unset" }}
           >
-            Practice Room
-          </Typography>
-        </Link>
-        {!isTablet && (
-          <Box
-            style={{
-              flexGrow: 1,
-              display: "flex",
-              justifyContent: "space-around",
-            }}
-          >
-            <Link to="/scale-calculator">Scales</Link>
-            <Link to="/interval-calculator">Intervals</Link>
-            <Link to="/chord-calculator">Chords</Link>
-            <Link to="/note-id">Note ID</Link>
-            <Link to="/interval-eartraining">Ear Training</Link>
-            <Link to="/leaderboard">Leaderboard</Link>
-          </Box>
-        )}
-      </Toolbar>
+            <Typography
+              variant="h6"
+              style={{ cursor: "pointer" }}
+              // onClick={() => window.location.assign("/")}
+            >
+              Practice Room
+            </Typography>
+          </Link>
+          {!isTablet && (
+            <Box
+              style={{
+                flexGrow: 1,
+                display: "flex",
+                justifyContent: "space-around",
+              }}
+            >
+              <Link to="/scale-calculator">Scales</Link>
+              <Link to="/interval-calculator">Intervals</Link>
+              <Link to="/chord-calculator">Chords</Link>
+              <Link to="/note-id">Note ID</Link>
+              <Link to="/interval-eartraining">Ear Training</Link>
+              <Link to="/leaderboard">Leaderboard</Link>
+            </Box>
+          )}
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 }

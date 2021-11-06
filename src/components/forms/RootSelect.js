@@ -3,11 +3,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import { alphabet } from "../../utils/musicConstants";
-import { FormItem } from "../Layout";
 
 export default function RootSelect(props) {
   return (
-    <FormItem>
       <FormControl fullWidth>
         <InputLabel id="root-label">Root</InputLabel>
         <Select
@@ -23,6 +21,5 @@ export default function RootSelect(props) {
           ))}
         </Select>
       </FormControl>
-    </FormItem>
   );
 }

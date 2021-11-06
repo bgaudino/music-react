@@ -1,27 +1,27 @@
 import { useState } from "react";
 import {
-  Box,
   Button,
+  Card,
   Dialog,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
+  Grid,
   useMediaQuery,
+  Grow,
+  Box,
+  DialogActions,
 } from "@material-ui/core";
 import AccidentalSelect from "../forms/AccidentalSelect";
+import Buttons from "../forms/Buttons";
 import ClefSelect from "../forms/ClefSelect";
 import RootSelect from "../forms/RootSelect";
 import Score from "../Score";
-import { FormItem } from "../Layout";
 import { calculateScale } from "../../utils/musicFunctions";
 import * as Tone from "tone";
 import ScaleTypeSelect from "../forms/ScaleTypeSelect";
 import ModeSelect from "../forms/ModeSelect";
-import { StyledButton } from "../forms/StyledButton";
 
 export default function ScaleCalculator() {
   const [notes, setNotes] = useState(null);
+  const [showStaff, setShowStaff] = useState(false);
   const [formData, setFormData] = useState({
     root: "C",
     clef: "treble",
@@ -31,12 +31,13 @@ export default function ScaleCalculator() {
     mode: 0,
   });
 
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const isMobile = useMediaQuery("(max-width:599px)");
 
   const handleClick = () => {
     const { root, clef, accidental, scaleType, mode } = formData;
     const scale = calculateScale(root, clef, accidental, scaleType, mode);
     setNotes({ ...scale, numNotes: 8 });
+    setShowStaff(true);
   };
 
   const playNotes = (notes) => {
@@ -53,109 +54,97 @@ export default function ScaleCalculator() {
 
   return (
     <>
-      <h2
-        style={{
-          textAlign: "center",
-          gridColumn: "span 3",
-        }}
-      >
-        Scale Calculator
-      </h2>
-      <ClefSelect
-        value={formData.clef}
-        onChange={(e) => setFormData({ ...formData, clef: e.target.value })}
+      <Grid item xs={12}>
+        <h2
+          style={{
+            textAlign: "center",
+          }}
+        >
+          Scale Calculator
+        </h2>
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <ClefSelect
+          value={formData.clef}
+          onChange={(e) => setFormData({ ...formData, clef: e.target.value })}
+        />
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <RootSelect
+          value={formData.root}
+          onChange={(e) => setFormData({ ...formData, root: e.target.value })}
+        />
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <AccidentalSelect
+          value={formData.accidental}
+          onChange={(e) =>
+            setFormData({ ...formData, accidental: e.target.value })
+          }
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <ScaleTypeSelect
+          value={formData.scaleType}
+          onChange={(e) =>
+            setFormData({ ...formData, scaleType: e.target.value })
+          }
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <ModeSelect
+          value={formData.mode}
+          onChange={(e) => setFormData({ ...formData, mode: e.target.value })}
+          scaleType={formData.scaleType}
+        />
+      </Grid>
+      <Buttons
+        isMobile={isMobile}
+        onPlay={() => playNotes(notes.toneArr)}
+        onCalculate={handleClick}
+        onClear={() => setShowStaff(false)}
+        playDisabled={!showStaff || !notes.toneArr}
+        clearDisabled={!showStaff}
       />
-      <RootSelect
-        value={formData.root}
-        onChange={(e) => setFormData({ ...formData, root: e.target.value })}
-      />
-      <AccidentalSelect
-        value={formData.accidental}
-        onChange={(e) =>
-          setFormData({ ...formData, accidental: e.target.value })
-        }
-      />
-      <ScaleTypeSelect
-        value={formData.scaleType}
-        onChange={(e) =>
-          setFormData({ ...formData, scaleType: e.target.value })
-        }
-      />
-      <ModeSelect
-        value={formData.mode}
-        onChange={(e) => setFormData({ ...formData, mode: e.target.value })}
-        scaleType={formData.scaleType}
-      />
-      {!isMobile && (
-        <FormItem>
-          <FormControl fullWidth>
-            <InputLabel id="sound-label">Sound</InputLabel>
-            <Select
-              id="sound"
-              labelId="sound-label"
-              value={formData.sound ? "on" : "off"}
-              onChange={(e) =>
-                setFormData({ ...formData, sound: e.target.value === "on" })
-              }
+      {!isMobile ? (
+        <Grid item xs={12}>
+          <Grow in={showStaff}>
+            <Card>
+              <Box
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "grid",
+                  placeItems: "center",
+                }}
+              >
+                <Score notes={notes} />
+              </Box>
+            </Card>
+          </Grow>
+        </Grid>
+      ) : (
+        <Dialog open={showStaff}>
+          <Score notes={notes} showStaff={true} />
+          <DialogActions>
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={() => playNotes(notes.toneArr)}
             >
-              <MenuItem value="off">off</MenuItem>
-              <MenuItem value="on">on</MenuItem>
-            </Select>
-          </FormControl>
-        </FormItem>
-      )}
-      {!isMobile && (
-        <StyledButton
-          variant="contained"
-          onClick={() => setNotes(null)}
-          disabled={!notes}
-        >
-          Clear
-        </StyledButton>
-      )}
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gridColumn: isMobile ? "span 3" : "span 1",
-          width: "100%",
-        }}
-      >
-        <StyledButton
-          fullWidth
-          variant="contained"
-          color="primary"
-          onClick={handleClick}
-        >
-          Calculate
-        </StyledButton>
-      </div>
-
-      {!isMobile && (
-        <StyledButton
-          disabled={!notes?.toneArr || !formData.sound}
-          variant="contained"
-          color="secondary"
-          onClick={() => playNotes(notes.toneArr)}
-        >
-          Play
-        </StyledButton>
-      )}
-      {notes && !isMobile && (
-        <Box style={{ gridColumn: "span 3", textAlign: "center" }}>
-          <Score notes={notes} />
-        </Box>
-      )}
-      {notes && isMobile && (
-        <Dialog open={notes}>
-          <Score notes={notes} />
-          <Button
-            onClick={() => setNotes(null)}
-            handleClose={() => setNotes(null)}
-          >
-            Close
-          </Button>
+              Play
+            </Button>
+          </DialogActions>
+          <DialogActions>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => setShowStaff(false)}
+            >
+              Close
+            </Button>
+          </DialogActions>
         </Dialog>
       )}
     </>

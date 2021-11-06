@@ -1,11 +1,9 @@
 import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
-import { FormItem } from "../Layout";
 import { modes } from "../../utils/musicConstants";
 
 export default function ModeSelect(props) {
   const { scaleType, onChange, value } = props;
   return (
-    <FormItem>
       <FormControl fullWidth>
         <InputLabel id="mode-label">Mode</InputLabel>
         <Select value={value} onChange={onChange}>
@@ -39,6 +37,5 @@ export default function ModeSelect(props) {
             : null}
         </Select>
       </FormControl>
-    </FormItem>
   );
 }

@@ -17,16 +17,3 @@ export default function Layout(props) {
   );
 }
 
-export function FormItem(props) {
-  const isMobile = useMediaQuery("(max-width:600px)");
-  return (
-    <Box
-      style={{
-        padding: isMobile ? 0 : "0 0.5rem",
-        gridColumn: isMobile ? "span 3" : "span 1",
-      }}
-    >
-      {props.children}
-    </Box>
-  );
-}
