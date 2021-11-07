@@ -20,7 +20,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import { intervals } from "../../utils/musicConstants";
 import { calculateInterval } from "../../utils/musicFunctions";
-import * as Tone from "tone";
+import playNotes from "../../utils/playNotes";
 
 export default function IntervalCalculator() {
   const [notes, setNotes] = useState(null);
@@ -31,7 +31,7 @@ export default function IntervalCalculator() {
     accidental: "natural",
     genericInterval: 0,
     quality: "perfect",
-    sound: "off",
+    sound: "ascending",
   });
 
   const isMobile = useMediaQuery("(max-width:599px)");
@@ -47,20 +47,6 @@ export default function IntervalCalculator() {
     );
     setNotes({ ...interval, numNotes: 1 });
     setShowStaff(true);
-  };
-
-  const playNotes = (notes) => {
-    if (formData.sound === "off") return;
-    let timeStart = 0;
-    let timeAdd = null;
-    formData.sound === "simultaneous" ? (timeAdd = 0) : (timeAdd = 0.5);
-    if (formData.sound === "descending") notes.push(notes.shift());
-    const synth = new Tone.PolySynth(Tone.Synth).toDestination();
-    const now = Tone.now();
-    notes.forEach((note) => {
-      synth.triggerAttackRelease(note, "2n", now + timeStart);
-      timeStart += timeAdd;
-    });
   };
 
   const shouldChangeQuality = (value) => {
@@ -191,13 +177,24 @@ export default function IntervalCalculator() {
           </Select>
         </FormControl>
       </Grid>
-      <Buttons
-        onCalculate={handleClick}
-        onPlay={() => playNotes(notes.toneArr)}
-        onClear={() => setShowStaff(false)}
-        playDisabled={!showStaff}
-        clearDisabled={!showStaff}
-      />
+      {!isMobile ? (
+        <Buttons
+          onCalculate={handleClick}
+          onPlay={() => playNotes(notes.toneArr, formData.sound, "2n")}
+          onClear={() => setShowStaff(false)}
+          playDisabled={!showStaff}
+          clearDisabled={!showStaff}
+        />
+      ) : (
+        <Button
+          fullWidth
+          color="primary"
+          variant="contained"
+          onClick={handleClick}
+        >
+          Calculate
+        </Button>
+      )}
       {!isMobile ? (
         <Grid item xs={12}>
           <Grow in={showStaff}>
@@ -225,7 +222,7 @@ export default function IntervalCalculator() {
               color="secondary"
               onClick={() => {
                 handleClick();
-                playNotes(notes.toneArr);
+                playNotes(notes.toneArr, formData.sound, "2n");
               }}
             >
               Play

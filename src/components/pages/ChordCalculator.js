@@ -5,7 +5,6 @@ import ClefSelect from "../forms/ClefSelect";
 import AccidentalSelect from "../forms/AccidentalSelect";
 import { chordQualities, sevenths } from "../../utils/musicConstants";
 import { calculateChord } from "../../utils/musicFunctions";
-import * as Tone from "tone";
 
 import { Grid, useMediaQuery } from "@material-ui/core";
 import Buttons from "../forms/Buttons";
@@ -13,6 +12,7 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
+import playNotes from "../../utils/playNotes";
 
 export default function ChordCalculator() {
   const [notes, setNotes] = useState({
@@ -21,35 +21,19 @@ export default function ChordCalculator() {
     clef: "treble",
     toneArr: ["C4", "E4", "G4"],
   });
-  const [sound, setSound] = useState("off");
+  const [sound, setSound] = useState("chord");
   const [inversion, setInversion] = useState(0);
   const [clef, setClef] = useState("treble");
   const [root, setRoot] = useState("C");
   const [quality, setQuality] = useState("major");
   const [accidental, setAccidental] = useState("natural");
+  const [showStaff, setShowStaff] = useState(false);
   const isMobile = useMediaQuery("(max-width:599px)");
-
-  const handleAccidentalChange = (e) => setAccidental(e.target.value);
-  const handleClefChange = (e) => setClef(e.target.value);
-  const handleInversionChange = (e) => setInversion(e.target.value);
-  const handleRootChange = (e) => setRoot(e.target.value);
-  const handleSoundChange = (e) => setSound(e.target.value);
-  const handleQualityChange = (e) => setQuality(e.target.value);
 
   const handleClick = () => {
     const chord = calculateChord(root, accidental, quality, clef, inversion);
     setNotes(chord);
-    if (sound !== "off") {
-      let timeStart = 0;
-      let timeAdd = null;
-      sound === "arpeggio" ? (timeAdd = 0.5) : (timeAdd = 0);
-      const synth = new Tone.PolySynth(Tone.Synth).toDestination();
-      const now = Tone.now();
-      chord.toneArr.forEach((note) => {
-        synth.triggerAttackRelease(note, "2n", now + timeStart);
-        timeStart += timeAdd;
-      });
-    }
+    setShowStaff(true);
   };
 
   return (
@@ -58,15 +42,15 @@ export default function ChordCalculator() {
         <h2>Chord Calculator</h2>
       </Grid>
       <Grid item xs={12} sm={4}>
-        <ClefSelect value={clef} onChange={handleClefChange} />
+        <ClefSelect value={clef} onChange={(e) => setClef(e.target.value)} />
       </Grid>
       <Grid item xs={12} sm={4}>
-        <RootSelect value={root} onChange={handleRootChange} />
+        <RootSelect value={root} onChange={(e) => setRoot(e.target.value)} />
       </Grid>
       <Grid item xs={12} sm={4}>
         <AccidentalSelect
           value={accidental}
-          onChange={handleAccidentalChange}
+          onChange={(e) => setAccidental(e.target.value)}
         />
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -76,7 +60,7 @@ export default function ChordCalculator() {
             id="quality"
             labelId="quality-label"
             value={quality}
-            onChange={handleQualityChange}
+            onChange={(e) => setQuality(e.target.value)}
           >
             {chordQualities.map((quality) => (
               <MenuItem key={quality} value={quality}>
@@ -93,7 +77,7 @@ export default function ChordCalculator() {
             id="inversion"
             labelId="inversion-label"
             value={inversion}
-            onChange={handleInversionChange}
+            onChange={(e) => setInversion(e.target.value)}
           >
             <MenuItem value={0}>root position</MenuItem>
             <MenuItem value={1}>1st inversion</MenuItem>
@@ -111,7 +95,7 @@ export default function ChordCalculator() {
             id="sound"
             labelId="sound-label"
             value={sound}
-            onChange={handleSoundChange}
+            onChange={(e) => setSound(e.target.value)}
           >
             <MenuItem value="off">off</MenuItem>
             <MenuItem value="chord">chord</MenuItem>
@@ -119,12 +103,13 @@ export default function ChordCalculator() {
           </Select>
         </FormControl>
       </Grid>
-
-      <Buttons 
+      <Buttons
         onCalculate={handleClick}
-        onPlay={() => null}
-        onClear={() => null}
-        showStaff={false}
+        onPlay={() => playNotes(notes.toneArr, sound, "2n")}
+        onClear={() => setShowStaff(false)}
+        playDisabled={!showStaff || sound === "off"}
+        clearDisabled={!showStaff}
+        showStaff={showStaff}
         isMobile={isMobile}
       />
       <Score notes={notes} numNotes="1" />

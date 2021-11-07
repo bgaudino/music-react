@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Score from "../Score";
 import ClefSelect from "../forms/ClefSelect";
 import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
 
 const scoreStyles = {
   display: "flex",

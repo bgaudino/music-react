@@ -1,9 +1,17 @@
 import { Button, Grid } from "@material-ui/core";
 
 export default function Buttons(props) {
-  const { isMobile, onPlay, onClear, onCalculate, playDisabled, clearDisabled} = props;
+  const {
+    isMobile,
+    onPlay,
+    onClear,
+    onCalculate,
+    playDisabled,
+    clearDisabled,
+  } = props;
   return (
     <>
+      <h1>{isMobile}</h1>
       {!isMobile && (
         <Grid item xs={12} sm={4}>
           <Button

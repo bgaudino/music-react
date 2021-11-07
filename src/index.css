@@ -5,17 +5,3 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f0f8ff;
 }
-
-#mobile {
-  display: none;
-}
-
-@media (max-width: 720px) {
-
-  #mobile {
-    display: block;
-  } 
-  #tabs {
-    display: none;
-  }
-}

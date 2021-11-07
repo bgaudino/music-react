@@ -4,6 +4,10 @@ import {
   Card,
   Dialog,
   Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
   useMediaQuery,
   Grow,
   Box,
@@ -15,7 +19,7 @@ import ClefSelect from "../forms/ClefSelect";
 import RootSelect from "../forms/RootSelect";
 import Score from "../Score";
 import { calculateScale } from "../../utils/musicFunctions";
-import * as Tone from "tone";
+import playNotes from "../../utils/playNotes";
 import ScaleTypeSelect from "../forms/ScaleTypeSelect";
 import ModeSelect from "../forms/ModeSelect";
 
@@ -27,7 +31,7 @@ export default function ScaleCalculator() {
     clef: "treble",
     accidental: "natural",
     scaleType: "major",
-    sound: true,
+    sound: "ascending",
     mode: 0,
   });
 
@@ -38,18 +42,6 @@ export default function ScaleCalculator() {
     const scale = calculateScale(root, clef, accidental, scaleType, mode);
     setNotes({ ...scale, numNotes: 8 });
     setShowStaff(true);
-  };
-
-  const playNotes = (notes) => {
-    if (!formData.sound) return;
-    let timeStart = 0;
-    let timeAdd = 0.5;
-    const synth = new Tone.PolySynth(Tone.Synth).toDestination();
-    const now = Tone.now();
-    notes.forEach((note) => {
-      synth.triggerAttackRelease(note, "4n", now + timeStart);
-      timeStart += timeAdd;
-    });
   };
 
   return (
@@ -83,7 +75,7 @@ export default function ScaleCalculator() {
           }
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={4}>
         <ScaleTypeSelect
           value={formData.scaleType}
           onChange={(e) =>
@@ -91,19 +83,37 @@ export default function ScaleCalculator() {
           }
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={4}>
         <ModeSelect
           value={formData.mode}
           onChange={(e) => setFormData({ ...formData, mode: e.target.value })}
           scaleType={formData.scaleType}
         />
       </Grid>
+      <Grid item xs={12} sm={4}>
+        <FormControl fullWidth>
+          <InputLabel>Sound</InputLabel>
+          <Select
+            value={formData.sound}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                sound: e.target.value,
+              })
+            }
+          >
+            <MenuItem value="off">off</MenuItem>
+            <MenuItem value="ascending">ascending</MenuItem>
+            <MenuItem value="descending">descending</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
       <Buttons
         isMobile={isMobile}
-        onPlay={() => playNotes(notes.toneArr)}
+        onPlay={() => playNotes(notes.toneArr, formData.sound, "4n")}
         onCalculate={handleClick}
         onClear={() => setShowStaff(false)}
-        playDisabled={!showStaff || !notes.toneArr}
+        playDisabled={!showStaff || !notes?.toneArr || formData.sound === "off"}
         clearDisabled={!showStaff}
       />
       {!isMobile ? (
@@ -131,7 +141,10 @@ export default function ScaleCalculator() {
               fullWidth
               variant="contained"
               color="secondary"
-              onClick={() => playNotes(notes.toneArr)}
+              onClick={() => playNotes(notes.toneArr, formData.sound, "4n")}
+              disabled={
+                formData.sound === "off" || !notes?.toneArr || !showStaff
+              }
             >
               Play
             </Button>
