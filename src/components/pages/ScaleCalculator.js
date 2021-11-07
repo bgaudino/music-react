@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -10,8 +10,8 @@ import {
   MenuItem,
   useMediaQuery,
   Grow,
-  Box,
   DialogActions,
+  DialogContent,
 } from "@material-ui/core";
 import AccidentalSelect from "../forms/AccidentalSelect";
 import Buttons from "../forms/Buttons";
@@ -34,9 +34,9 @@ export default function ScaleCalculator() {
     sound: "ascending",
     mode: 0,
   });
-
   const isMobile = useMediaQuery("(max-width:599px)");
 
+  useEffect(() => handleClick(), [formData]);
   const handleClick = () => {
     const { root, clef, accidental, scaleType, mode } = formData;
     const scale = calculateScale(root, clef, accidental, scaleType, mode);
@@ -116,49 +116,46 @@ export default function ScaleCalculator() {
         playDisabled={!showStaff || !notes?.toneArr || formData.sound === "off"}
         clearDisabled={!showStaff}
       />
-      {!isMobile ? (
+      {isMobile ? (
+        <Dialog open={showStaff} fullScreen>
+          <div
+            style={{ height: "100vh", display: "grid", placeItems: "center" }}
+          >
+            <div style={{ width: "100%" }}>
+              <Score notes={notes} width={480} />
+              <DialogActions>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  onClick={() =>
+                    playNotes(notes.toneArr, formData, formData.sound, "4n")
+                  }
+                  disabled={formData.sound === "off" || !showStaff}
+                >
+                  Play
+                </Button>
+              </DialogActions>
+              <DialogActions>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => setShowStaff(false)}
+                >
+                  Close
+                </Button>
+              </DialogActions>
+            </div>
+          </div>
+        </Dialog>
+      ) : (
         <Grid item xs={12}>
           <Grow in={showStaff}>
             <Card>
-              <Box
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                <Score notes={notes} />
-              </Box>
+              <Score notes={notes} width={480} />
             </Card>
           </Grow>
         </Grid>
-      ) : (
-        <Dialog open={showStaff}>
-          <Score notes={notes} showStaff={true} />
-          <DialogActions>
-            <Button
-              fullWidth
-              variant="contained"
-              color="secondary"
-              onClick={() => playNotes(notes.toneArr, formData.sound, "4n")}
-              disabled={
-                formData.sound === "off" || !notes?.toneArr || !showStaff
-              }
-            >
-              Play
-            </Button>
-          </DialogActions>
-          <DialogActions>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => setShowStaff(false)}
-            >
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
       )}
     </>
   );

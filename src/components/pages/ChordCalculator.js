@@ -5,8 +5,16 @@ import ClefSelect from "../forms/ClefSelect";
 import AccidentalSelect from "../forms/AccidentalSelect";
 import { chordQualities, sevenths } from "../../utils/musicConstants";
 import { calculateChord } from "../../utils/musicFunctions";
-
-import { Grid, useMediaQuery } from "@material-ui/core";
+import {
+  Grid,
+  useMediaQuery,
+  Grow,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Button,
+} from "@material-ui/core";
 import Buttons from "../forms/Buttons";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -112,7 +120,45 @@ export default function ChordCalculator() {
         showStaff={showStaff}
         isMobile={isMobile}
       />
-      <Score notes={notes} numNotes="1" />
+      {isMobile ? (
+        <Dialog open={showStaff} fullScreen>
+          <div
+            style={{ height: "100vh", display: "grid", placeItems: "center" }}
+          >
+            <div style={{ width: "100%" }}>
+              <Score notes={notes} width={120} />
+              <DialogActions>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => playNotes(notes.toneArr, sound, "4n")}
+                  disabled={sound === "off" || !showStaff}
+                >
+                  Play
+                </Button>
+              </DialogActions>
+              <DialogActions>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => setShowStaff(false)}
+                >
+                  Close
+                </Button>
+              </DialogActions>
+            </div>
+          </div>
+        </Dialog>
+      ) : (
+        <Grid item xs={12}>
+          <Grow in={showStaff}>
+            <Card>
+              <Score notes={notes} width={120} />
+            </Card>
+          </Grow>
+        </Grid>
+      )}
     </>
   );
 }

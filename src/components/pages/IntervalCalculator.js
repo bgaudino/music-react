@@ -177,53 +177,24 @@ export default function IntervalCalculator() {
           </Select>
         </FormControl>
       </Grid>
-      {!isMobile ? (
-        <Buttons
-          onCalculate={handleClick}
-          onPlay={() => playNotes(notes.toneArr, formData.sound, "2n")}
-          onClear={() => setShowStaff(false)}
-          playDisabled={!showStaff}
-          clearDisabled={!showStaff}
-        />
-      ) : (
-        <Button
-          fullWidth
-          color="primary"
-          variant="contained"
-          onClick={handleClick}
-        >
-          Calculate
-        </Button>
-      )}
-      {!isMobile ? (
-        <Grid item xs={12}>
-          <Grow in={showStaff}>
-            <Card>
-              <Box
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                <Score notes={notes} />
-              </Box>
-            </Card>
-          </Grow>
-        </Grid>
-      ) : (
-        <Dialog open={showStaff}>
-          <Score notes={notes} showStaff={true} />
+      <Buttons
+        isMobile={isMobile}
+        onCalculate={handleClick}
+        onPlay={() => playNotes(notes.toneArr, formData.sound, "2n")}
+        onClear={() => setShowStaff(false)}
+        playDisabled={!showStaff || formData.sound === "off"}
+        clearDisabled={!showStaff}
+      />
+      {isMobile ? (
+        <Dialog open={showStaff} fullWidth>
+          <Score notes={notes} width={120} />
           <DialogActions>
             <Button
               fullWidth
               variant="contained"
               color="secondary"
-              onClick={() => {
-                handleClick();
-                playNotes(notes.toneArr, formData.sound, "2n");
-              }}
+              onClick={() => playNotes(notes.toneArr, formData.sound, "4n")}
+              disabled={formData.sound === "off" || !showStaff}
             >
               Play
             </Button>
@@ -238,6 +209,14 @@ export default function IntervalCalculator() {
             </Button>
           </DialogActions>
         </Dialog>
+      ) : (
+        <Grid item xs={12}>
+          <Grow in={showStaff}>
+            <Card>
+              <Score notes={notes} width={120} />
+            </Card>
+          </Grow>
+        </Grid>
       )}
     </>
   );

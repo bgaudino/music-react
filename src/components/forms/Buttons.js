@@ -11,7 +11,6 @@ export default function Buttons(props) {
   } = props;
   return (
     <>
-      <h1>{isMobile}</h1>
       {!isMobile && (
         <Grid item xs={12} sm={4}>
           <Button

@@ -21,13 +21,9 @@ export default function Navbar() {
             to="/scale-calculator"
             style={{ textDecoration: "unset", color: "unset" }}
           >
-            <Typography
-              variant="h6"
-              style={{ cursor: "pointer" }}
-              // onClick={() => window.location.assign("/")}
-            >
+            <h2 style={{ cursor: "pointer" }}>
               Practice Room
-            </Typography>
+            </h2>
           </Link>
           {!isTablet && (
             <Box
