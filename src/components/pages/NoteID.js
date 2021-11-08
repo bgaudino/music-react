@@ -1,31 +1,44 @@
 import { alphabet } from "../../utils/musicConstants";
-import { Button, Box, Grid } from "@material-ui/core";
+import { Button, Grid, useMediaQuery } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import Score from "../Score";
 import ClefSelect from "../forms/ClefSelect";
-import TextField from "@material-ui/core/TextField";
 
-const scoreStyles = {
-  display: "flex",
-  gap: "20px",
-  justifyContent: "center",
-};
 export default function NoteID(props) {
-  const [numAttempts, setNumAttempts] = useState(0);
+  const [numAttempts, setNumAttempts] = useState(
+    Number(localStorage.getItem("numAttempts")) || 0
+  );
+  const [numCorrect, setNumCorrect] = useState(
+    Number(localStorage.getItem("numCorrect")) || 0
+  );
+  const [PCT, setPCT] = useState(
+    Math.round(numAttempts / numCorrect) * 100 || 0
+  );
   const [octaves, setOctaves] = useState(["4", "5"]);
-  const [name, setName] = useState("");
   const [notes, setNotes] = useState({
     vexStr: null,
     display: "",
     clef: "treble",
     octave: "4",
   });
-  const [numCorrect, setNumCorrect] = useState(0);
+  const [clef, setClef] = useState("treble");
   const [currentNote, setCurrentNote] = useState(
     alphabet[Math.floor(Math.random() * (alphabet.length - 1))]
   );
-  const [PCT, setPCT] = useState(0);
-  const [emoji, setEmoji] = useState(null);
+  const [emoji, setEmoji] = useState(getEmoji(numAttempts, numCorrect));
+  const isMobile = useMediaQuery("(max-width:600px)");
+
+  function getEmoji(numAttempts, numCorrect) {
+    if (numAttempts === 0) {
+      return null;
+    }
+    const pct = Math.round(numCorrect / numAttempts) * 100;
+    if (pct > 90) return "😁";
+    else if (pct > 80) return "😀";
+    else if (pct > 70) return "😐";
+    else if (pct > 60) return "😟";
+    else return "😭";
+  }
 
   const changeClef = (e) => {
     let range = [4, 5];
@@ -43,13 +56,11 @@ export default function NoteID(props) {
     });
   };
 
-  const onNameChange = (e) => {
-    setName(e.target.value);
-  };
   const makeGuess = (e) => {
     let updatedAttempts = numAttempts + 1;
     let pct = null;
     setNumAttempts(updatedAttempts);
+    localStorage.setItem("numAttempts", updatedAttempts);
     const newGuess = e.target.innerText;
     if (newGuess === currentNote) {
       const newNote =
@@ -57,12 +68,14 @@ export default function NoteID(props) {
       const newOctave = octaves[Math.floor(Math.random() * 2)];
       const updatedCorrect = numCorrect + 1;
       setNumCorrect(updatedCorrect);
+      localStorage.setItem("numCorrect", updatedCorrect);
       setCurrentNote(newNote);
       setNotes({
         ...notes,
         vexStr: newNote + newOctave + "/w",
         display: "",
         octave: newOctave,
+        numNotes: 1,
       });
       pct = Math.round((updatedCorrect / updatedAttempts) * 100);
       setPCT(pct);
@@ -70,47 +83,9 @@ export default function NoteID(props) {
       pct = Math.round((numCorrect / updatedAttempts) * 100);
       setPCT(pct);
     }
-    if (pct > 90) setEmoji("😁");
-    else if (pct > 80) setEmoji("😀");
-    else if (pct > 70) setEmoji("😐");
-    else if (pct > 60) setEmoji("😟");
-    else setEmoji("😭");
+    setEmoji(getEmoji(updatedAttempts, updatedAttempts));
   };
 
-  const submitScore = () => {
-    const score = {
-      name: name,
-      numCorrect: numCorrect,
-      numAttempts: numAttempts,
-      pct: Math.round((numCorrect / numAttempts) * 100),
-      game: "Note ID",
-    };
-
-    fetch(
-      "https://sheet.best/api/sheets/fa8cefd4-9b56-41da-8404-f1bb6419f02c",
-      {
-        method: "POST",
-        headers: {
-          "X-API-KEY":
-            "Rj-G_Fdl-q#fRaEaaC299_ThGg-0zS4HcDWQ4ky3w5J1MmeJ6t-U5rY0adfa8qnG",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(score),
-      }
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        props.setRoute("Leaderboard");
-      })
-      .catch((error) => console.log(error));
-
-    setName("");
-    setNumAttempts(0);
-    setNumCorrect(0);
-    setEmoji(null);
-    setPCT(0);
-  };
   useEffect(() => {
     const octave = octaves[Math.floor(Math.random() * 2)];
     setNotes({
@@ -118,51 +93,70 @@ export default function NoteID(props) {
       vexStr: currentNote + octave + "/w",
       display: "",
       octave: octave,
-    }); // eslint-disable-next-line
+    });
   }, []);
 
   return (
     <>
       <Grid item xs={12}>
-        <h2>Note Identification</h2>
-      </Grid>
-      <Grid item xs={12}>
-        <h3 style={scoreStyles}>
-          <span>Score:</span>
-          <span>
-            {numCorrect} / {numAttempts}
-          </span>
-          <span>{PCT}%</span>
-          <span>{emoji}</span>
+        <h2
+          style={{
+            textAlign: "center",
+          }}
+        >
+          Note Identification
+        </h2>
+        <h3
+          style={{
+            textAlign: "center",
+            marginBottom: -100,
+          }}
+        >
+          Score: {numCorrect}/{numAttempts} {PCT}% {emoji}
         </h3>
       </Grid>
-      <Grid xs={12} item>
-        {notes.vexStr !== null ? <Score notes={notes} numNotes={1} /> : null}
-      </Grid>
-      <Grid item xs={12}>
-        <ClefSelect onChange={changeClef} />
-      </Grid>
-      <Grid item xs={12}>
-        <Box style={{ display: "flex", justifyContent: "space-around" }}>
-          {alphabet.map((note) => (
-            <Button fullWidth variant="contained" onClick={makeGuess}>
-              {note}
-            </Button>
-          ))}
-        </Box>
-      </Grid>
-      <div>
-        <TextField
-          value={name}
-          onChange={onNameChange}
-          id="standard-basic"
-          label="Name"
+      {notes.vexStr !== null ? <Score notes={notes} width={140} /> : null}
+      <Grid item xs={0} sm={4} />
+      <Grid item sm={4} xs={12}>
+        <ClefSelect
+          value={clef}
+          onChange={(e) => {
+            setClef(e.target.value);
+            changeClef(e);
+          }}
         />
+      </Grid>
+      {!isMobile && <Grid item xs={0} sm={4} />}
+      {["A", "B", "C", "D", "E", "F", "G"].map((note) => (
+        <Grid item xs={3} key={note}>
+          <Button
+            fullWidth
+            color="primary"
+            variant="contained"
+            onClick={makeGuess}
+          >
+            {note}
+          </Button>
+        </Grid>
+      ))}
+      <Grid item xs={0} sm={4} />
 
-        <Button onClick={submitScore} variant="contained" color="primary">
-          Submit Score
+      <Grid item xs={12} sm={4}>
+        <Button
+          onClick={() => {
+            setNumAttempts(0);
+            setNumCorrect(0);
+            setPCT(0);
+            setEmoji(null);
+            localStorage.setItem("numAttempts", 0);
+            localStorage.setItem("numCorrect", 0);
+          }}
+          fullWidth
+          variant="contained"
+        >
+          Reset Score
         </Button>
-      </div>
+      </Grid>
     </>
   );
 }

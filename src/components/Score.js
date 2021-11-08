@@ -1,18 +1,19 @@
-import { Box } from "@material-ui/core";
+import { Box, useMediaQuery } from "@material-ui/core";
 import { useEffect, useRef } from "react";
 import Vex from "vexflow";
 
 export default function Score(props) {
-  const { notes, width, shrink } = props || {};
+  const { notes, width, height, responsive } = props || {};
   const staffRef = useRef(null);
+
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     const staff = staffRef.current;
-
     if (!notes || !staff) return;
     staff.innerHTML = "";
     const vf = new Vex.Flow.Factory({
-      renderer: { elementId: "staff", width: width || 500, height: 200 },
+      renderer: { elementId: "staff", width: width || 480, height: 120 },
     });
     const score = vf.EasyScore();
     const system = vf.System();
@@ -33,18 +34,27 @@ export default function Score(props) {
   }, [props, notes, staffRef]);
 
   return (
-    <>
-      <h2 style={{ textAlign: "center" }}>{notes?.display}</h2>
-      <div>
-        
-      </div>
+    <div
+      style={{
+        width: "100%",
+        height: height || 240,
+        maxWidth: "100vw",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <h2 style={{ textAlign: "center", marginTop: "4rem" }}>
+        {notes?.display}
+      </h2>
       <div
         style={{
-          overflow: "scroll",
+          transform: responsive && isMobile ? "scale(0.7)" : "scale(1)",
         }}
         ref={staffRef}
         id="staff"
       />
-    </>
+    </div>
   );
 }

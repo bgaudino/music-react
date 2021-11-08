@@ -3,7 +3,6 @@ import {
   Box,
   Container,
   Toolbar,
-  Typography,
   useMediaQuery,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
@@ -38,7 +37,6 @@ export default function Navbar() {
               <Link to="/chord-calculator">Chords</Link>
               <Link to="/note-id">Note ID</Link>
               <Link to="/interval-eartraining">Ear Training</Link>
-              <Link to="/leaderboard">Leaderboard</Link>
             </Box>
           )}
         </Toolbar>
