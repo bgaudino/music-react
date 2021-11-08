@@ -4,7 +4,7 @@ import IntervalCalculator from "./components/pages/IntervalCalculator";
 import IntervalET from "./components/pages/IntervalET";
 import NoteID from "./components/pages/NoteID";
 import { Container, Grid, ThemeProvider } from "@material-ui/core";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { CssBaseline } from "@material-ui/core";
 import Navbar from "./components/Navbar";
 import { theme } from "./components/theme";
