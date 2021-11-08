@@ -122,8 +122,7 @@ export default function IntervalET(props) {
         <Snackbar
           open={feedbackOpen}
           onClose={() => setFeedbackOpen(false)}
-          autoHideDuration={3000}
-          elevation={1000}
+          autoHideDuration={1000}
         >
           <MuiAlert severity={feedback === "Correct!" ? "success" : "error"}>
             {feedback}
