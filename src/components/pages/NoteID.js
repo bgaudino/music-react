@@ -65,18 +65,10 @@ export default function NoteID(props) {
     if (newGuess === currentNote) {
       const newNote =
         alphabet[Math.floor(Math.random() * (alphabet.length - 1))];
-      const newOctave = octaves[Math.floor(Math.random() * 2)];
       const updatedCorrect = numCorrect + 1;
       setNumCorrect(updatedCorrect);
       localStorage.setItem("numCorrect", updatedCorrect);
       setCurrentNote(newNote);
-      setNotes({
-        ...notes,
-        vexStr: newNote + newOctave + "/w",
-        display: "",
-        octave: newOctave,
-        numNotes: 1,
-      });
       pct = Math.round((updatedCorrect / updatedAttempts) * 100);
       setPCT(pct);
     } else {
@@ -88,13 +80,14 @@ export default function NoteID(props) {
 
   useEffect(() => {
     const octave = octaves[Math.floor(Math.random() * 2)];
-    setNotes({
-      ...notes,
+    setNotes(() => ({
+      clef: clef,
       vexStr: currentNote + octave + "/w",
       display: "",
       octave: octave,
-    });
-  }, []);
+      numNotes: 1,
+    }));
+  }, [currentNote, octaves, clef]);
 
   return (
     <>

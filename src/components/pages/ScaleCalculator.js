@@ -27,12 +27,11 @@ export default function ScaleCalculator() {
     mode: 0,
   });
 
-  useEffect(() => drawNotes(), [formData]);
-  const drawNotes = () => {
+  useEffect(() => {
     const { root, clef, accidental, scaleType, mode } = formData;
     const scale = calculateScale(root, clef, accidental, scaleType, mode);
     setNotes({ ...scale, numNotes: 8 });
-  };
+  }, [formData]);
 
   return (
     <>

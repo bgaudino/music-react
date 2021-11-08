@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@material-ui/core";
+import { useMediaQuery } from "@material-ui/core";
 import { useEffect, useRef } from "react";
 import Vex from "vexflow";
 
@@ -31,7 +31,7 @@ export default function Score(props) {
       })
       .addClef(notes.clef);
     vf.draw();
-  }, [props, notes, staffRef]);
+  }, [props, notes, staffRef, width]);
 
   return (
     <div

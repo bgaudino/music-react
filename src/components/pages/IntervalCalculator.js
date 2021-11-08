@@ -21,9 +21,7 @@ export default function IntervalCalculator() {
     sound: "ascending",
   });
 
-  useEffect(() => handleClick(), [formData]);
-
-  const handleClick = () => {
+  useEffect(() => {
     const { root, clef, accidental, genericInterval, quality } = formData;
     const interval = calculateInterval(
       root,
@@ -33,7 +31,7 @@ export default function IntervalCalculator() {
       clef
     );
     setNotes({ ...interval, numNotes: 1 });
-  };
+  }, [formData]);
 
   const shouldChangeQuality = (value) => {
     const perfects = intervals.perfectIntervals;

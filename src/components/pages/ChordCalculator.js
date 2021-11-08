@@ -26,12 +26,10 @@ export default function ChordCalculator() {
   const [quality, setQuality] = useState("major");
   const [accidental, setAccidental] = useState("natural");
 
-  const handleClick = () => {
+  useEffect(() => {
     const chord = calculateChord(root, accidental, quality, clef, inversion);
     setNotes(chord);
-  };
-
-  useEffect(() => handleClick(), [root, accidental, quality, clef, inversion]);
+  }, [root, accidental, quality, clef, inversion]);
 
   return (
     <>
