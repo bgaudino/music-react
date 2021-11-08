@@ -3,6 +3,7 @@ import { Button, Grid, useMediaQuery } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import Score from "../Score";
 import ClefSelect from "../forms/ClefSelect";
+import { getEmoji } from "../../utils/getEmoji";
 
 export default function NoteID(props) {
   const [numAttempts, setNumAttempts] = useState(
@@ -27,18 +28,6 @@ export default function NoteID(props) {
   );
   const [emoji, setEmoji] = useState(getEmoji(numAttempts, numCorrect));
   const isMobile = useMediaQuery("(max-width:600px)");
-
-  function getEmoji(numAttempts, numCorrect) {
-    if (numAttempts === 0) {
-      return null;
-    }
-    const pct = Math.round(numCorrect / numAttempts) * 100;
-    if (pct > 90) return "😁";
-    else if (pct > 80) return "😀";
-    else if (pct > 70) return "😐";
-    else if (pct > 60) return "😟";
-    else return "😭";
-  }
 
   const changeClef = (e) => {
     let range = [4, 5];

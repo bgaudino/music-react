@@ -104,8 +104,8 @@ export default function ScaleCalculator() {
           fullWidth
           disabled={formData.sound === "off"}
           variant="contained"
-          color="primary"
           onClick={() => playNotes(notes.toneArr, formData.sound, "4n")}
+          color="primary"
         >
           Play
         </Button>

@@ -52,9 +52,6 @@ export default function SimpleMenu() {
         <Link style={styles} to="/interval-eartraining">
           <MenuItem onClick={handleClose}>Interval Eartraining</MenuItem>
         </Link>
-        <Link style={styles} to="/leaderboard">
-          <MenuItem onClick={handleClose}>Leaderboard</MenuItem>
-        </Link>
       </Menu>
     </div>
   );

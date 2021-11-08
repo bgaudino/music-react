@@ -7,12 +7,16 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import SimpleMenu from "./SimpleMenu";
+import { theme } from "./theme";
 
 export default function Navbar() {
   const isTablet = useMediaQuery("(max-width: 900px)");
 
   return (
-    <AppBar color="transparent" position="static">
+    <AppBar
+      style={{ background: theme.palette.primary.mainGradient }}
+      position="static"
+    >
       <Container maxWidth="lg">
         <Toolbar>
           {isTablet && <SimpleMenu />}
@@ -20,9 +24,7 @@ export default function Navbar() {
             to="/scale-calculator"
             style={{ textDecoration: "unset", color: "unset" }}
           >
-            <h2 style={{ cursor: "pointer" }}>
-              Practice Room
-            </h2>
+            <h2 style={{ cursor: "pointer" }}>Practice Room</h2>
           </Link>
           {!isTablet && (
             <Box
@@ -32,11 +34,36 @@ export default function Navbar() {
                 justifyContent: "space-around",
               }}
             >
-              <Link to="/scale-calculator">Scales</Link>
-              <Link to="/interval-calculator">Intervals</Link>
-              <Link to="/chord-calculator">Chords</Link>
-              <Link to="/note-id">Note ID</Link>
-              <Link to="/interval-eartraining">Ear Training</Link>
+              <Link
+                style={{ color: theme.palette.primary.light }}
+                to="/scale-calculator"
+              >
+                Scales
+              </Link>
+              <Link
+                style={{ color: theme.palette.primary.light }}
+                to="/interval-calculator"
+              >
+                Intervals
+              </Link>
+              <Link
+                style={{ color: theme.palette.primary.light }}
+                to="/chord-calculator"
+              >
+                Chords
+              </Link>
+              <Link
+                style={{ color: theme.palette.primary.light }}
+                to="/note-id"
+              >
+                Note ID
+              </Link>
+              <Link
+                style={{ color: theme.palette.primary.light }}
+                to="/interval-eartraining"
+              >
+                Ear Training
+              </Link>
             </Box>
           )}
         </Toolbar>
