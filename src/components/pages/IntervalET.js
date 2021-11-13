@@ -24,6 +24,7 @@ const IntervalButtons = (props) => {
         return (
           <Grid item xs={3} key={interval}>
             <Button
+              disabled={props.disabled}
               variant="contained"
               color="primary"
               style={btnStyle}
@@ -39,6 +40,7 @@ const IntervalButtons = (props) => {
 };
 
 export default function IntervalET(props) {
+  const [started, setStarted] = useState(false);
   const [interval, setInterval] = useState(null);
   const [score, setScore] = useState({
     numCorrect: Number(localStorage.getItem("ETnumCorrect")) || 0,
@@ -145,18 +147,35 @@ export default function IntervalET(props) {
         </FormControl>
       </Grid>
 
-      <IntervalButtons intervals={intervals.abbreviations} onClick={onClick} />
-      <Grid item xs={12}>
+      <IntervalButtons
+        disabled={!started}
+        intervals={intervals.abbreviations}
+        onClick={onClick}
+      />
+      <Grid item xs={12} />
+      <Grid item xs={0} sm={4} />
+      <Grid item xs={12} sm={4}>
         <Button
+          fullWidth
           variant="contained"
           color="primary"
-          onClick={() => play(notes)}
+          onClick={() => {
+            if (!started) setStarted(true);
+            play(notes);
+          }}
         >
-          Play again
+          {started
+            ? "Play Note Again"
+            : score.numAttempts === 0
+            ? "Start"
+            : "Resume"}
         </Button>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={0} sm={4} />
+      <Grid item xs={0} sm={4} />
+      <Grid item xs={12} sm={4}>
         <Button
+          fullWidth
           onClick={() => {
             setScore({
               numCorrect: 0,

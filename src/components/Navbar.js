@@ -8,9 +8,25 @@ import {
 import { Link } from "react-router-dom";
 import SimpleMenu from "./SimpleMenu";
 import { theme } from "./theme";
+import { useLocation } from "react-router";
 
 export default function Navbar() {
   const isTablet = useMediaQuery("(max-width: 900px)");
+  const location = useLocation();
+
+  function getStyles(path) {
+    const styles = {
+      color: theme.palette.primary.light,
+      textDecoration: "none",
+      fontWeight: "unset",
+      transform: "scale(1)",
+    };
+    if (location.pathname === path) {
+      styles.fontWeight = "bold";
+      styles.transform = "scale(1.1)";
+    }
+    return styles;
+  }
 
   return (
     <AppBar
@@ -35,31 +51,28 @@ export default function Navbar() {
               }}
             >
               <Link
-                style={{ color: theme.palette.primary.light }}
+                style={getStyles("/scale-calculator")}
                 to="/scale-calculator"
               >
                 Scales
               </Link>
               <Link
-                style={{ color: theme.palette.primary.light }}
+                style={getStyles("/interval-calculator")}
                 to="/interval-calculator"
               >
                 Intervals
               </Link>
               <Link
-                style={{ color: theme.palette.primary.light }}
+                style={getStyles("/chord-calculator")}
                 to="/chord-calculator"
               >
                 Chords
               </Link>
-              <Link
-                style={{ color: theme.palette.primary.light }}
-                to="/note-id"
-              >
+              <Link style={getStyles("/note-id")} to="/note-id">
                 Note ID
               </Link>
               <Link
-                style={{ color: theme.palette.primary.light }}
+                style={getStyles("/interval-eartraining")}
                 to="/interval-eartraining"
               >
                 Ear Training
