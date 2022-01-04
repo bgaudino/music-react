@@ -8,6 +8,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { CssBaseline } from "@material-ui/core";
 import Navbar from "./components/Navbar";
 import { theme } from "./components/theme";
+import Leaderboard from "./components/pages/Leaderboard";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/chord-calculator" component={ChordCalculator} />
               <Route path="/note-id" component={NoteID} />
               <Route path="/interval-eartraining" component={IntervalET} />
+              <Route path="/leaderboard" component={Leaderboard} />
               <Route path="/" exact component={ScaleCalculator} />
             </Grid>
           </Container>

@@ -66,6 +66,10 @@ export default function IntervalET(props) {
     setNotes(result.notes);
   }, []);
 
+  useEffect(() => {
+    setEmoji(() => getEmoji(score.numAttempts, score.numCorrect));
+  }, [score.numAttempts, score.numCorrect]);
+
   const onPlayModeChange = (e) => setPlayMode(e.target.value);
 
   const play = (notes) => {
@@ -111,7 +115,6 @@ export default function IntervalET(props) {
       });
     }
     setFeedbackOpen(true);
-    setEmoji(getEmoji(updatedAttempts, score.numCorrect));
   };
 
   return (
@@ -119,12 +122,21 @@ export default function IntervalET(props) {
       <Grid item xs={12}>
         <h2>Interval Ear Training</h2>
         <h3>
-          Score: {score.numCorrect} / {score.numAttempts} {score.pct}% {emoji}
+          Score: {score.numCorrect} / {score.numAttempts} {score.pct}%{" "}
+          <span
+            style={{
+              fontSize: "1.5em",
+              verticalAlign: "middle",
+            }}
+          >
+            {emoji}
+          </span>
         </h3>
         <Snackbar
           open={feedbackOpen}
           onClose={() => setFeedbackOpen(false)}
           autoHideDuration={1000}
+          position="top"
         >
           <MuiAlert severity={feedback === "Correct!" ? "success" : "error"}>
             {feedback}
@@ -182,7 +194,6 @@ export default function IntervalET(props) {
               numAttempts: 0,
               pct: 0,
             });
-            setEmoji(null);
             localStorage.setItem("ETnumAttempts", 0);
             localStorage.setItem("ETnumCorrect", 0);
           }}

@@ -77,6 +77,9 @@ export default function Navbar() {
               >
                 Ear Training
               </Link>
+              <Link style={getStyles("/leaderboard")} to="/leaderboard">
+                Leaderboard
+              </Link>
             </Box>
           )}
         </Toolbar>

@@ -27,10 +27,14 @@ export default function NoteID(props) {
   const [currentNote, setCurrentNote] = useState(
     alphabet[Math.floor(Math.random() * (alphabet.length - 1))]
   );
-  const [emoji, setEmoji] = useState(getEmoji(numAttempts, numCorrect));
   const isMobile = useMediaQuery("(max-width:600px)");
   const [feedback, setFeedback] = useState("");
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [emoji, setEmoji] = useState(getEmoji(numAttempts, numCorrect));
+
+  useEffect(() => {
+    setEmoji(() => getEmoji(numAttempts, numCorrect));
+  }, [numAttempts, numCorrect]);
 
   const changeClef = (e) => {
     let range = [4, 5];
@@ -70,7 +74,6 @@ export default function NoteID(props) {
       setPCT(pct);
     }
     setFeedbackOpen(true);
-    setEmoji(getEmoji(updatedAttempts, updatedAttempts));
   };
 
   useEffect(() => {
@@ -100,13 +103,22 @@ export default function NoteID(props) {
             marginBottom: -100,
           }}
         >
-          Score: {numCorrect}/{numAttempts} {PCT}% {emoji}
+          Score: {numCorrect}/{numAttempts} {PCT}%{" "}
+          <span
+            style={{
+              fontSize: "1.5em",
+              verticalAlign: "middle",
+            }}
+          >
+            {emoji}
+          </span>
         </h3>
       </Grid>
       <Snackbar
         open={feedbackOpen}
         onClose={() => setFeedbackOpen(false)}
         autoHideDuration={1000}
+        position="top"
       >
         <MuiAlert severity={feedback === "Correct!" ? "success" : "error"}>
           {feedback}
@@ -143,7 +155,6 @@ export default function NoteID(props) {
             setNumAttempts(0);
             setNumCorrect(0);
             setPCT(0);
-            setEmoji(null);
             localStorage.setItem("numAttempts", 0);
             localStorage.setItem("numCorrect", 0);
           }}

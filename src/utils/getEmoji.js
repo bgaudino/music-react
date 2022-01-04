@@ -2,7 +2,7 @@ export function getEmoji(numAttempts, numCorrect) {
   if (numAttempts === 0) {
     return null;
   }
-  const pct = Math.round(numCorrect / numAttempts) * 100;
+  const pct = (numCorrect / numAttempts) * 100;
   if (pct > 90) return "😁";
   else if (pct > 80) return "😀";
   else if (pct > 70) return "😐";
