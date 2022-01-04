@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Score from "../Score";
 import ClefSelect from "../forms/ClefSelect";
 import { getEmoji } from "../../utils/getEmoji";
+import SubmitScore from "../forms/SubmitScore";
 
 export default function NoteID(props) {
   const [numAttempts, setNumAttempts] = useState(
@@ -31,6 +32,7 @@ export default function NoteID(props) {
   const [feedback, setFeedback] = useState("");
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [emoji, setEmoji] = useState(getEmoji(numAttempts, numCorrect));
+  const [submitScore, setSubmitScore] = useState(false);
 
   useEffect(() => {
     setEmoji(() => getEmoji(numAttempts, numCorrect));
@@ -74,6 +76,14 @@ export default function NoteID(props) {
       setPCT(pct);
     }
     setFeedbackOpen(true);
+  };
+
+  const clearScore = () => {
+    setNumAttempts(0);
+    setNumCorrect(0);
+    setPCT(0);
+    localStorage.setItem("numAttempts", 0);
+    localStorage.setItem("numCorrect", 0);
   };
 
   useEffect(() => {
@@ -148,22 +158,32 @@ export default function NoteID(props) {
           </Button>
         </Grid>
       ))}
-      <Grid item xs={0} sm={4} />
-      <Grid item xs={12} sm={4}>
+      <Grid item xs={6}>
         <Button
-          onClick={() => {
-            setNumAttempts(0);
-            setNumCorrect(0);
-            setPCT(0);
-            localStorage.setItem("numAttempts", 0);
-            localStorage.setItem("numCorrect", 0);
-          }}
           fullWidth
+          color="primary"
           variant="contained"
+          onClick={() => setSubmitScore(true)}
+          disabled={numAttempts === 0}
         >
+          Submit Score
+        </Button>
+      </Grid>
+      <Grid item xs={6}>
+        <Button onClick={clearScore} fullWidth variant="contained">
           Reset Score
         </Button>
       </Grid>
+      <SubmitScore
+        isOpen={submitScore}
+        setIsOpen={setSubmitScore}
+        numCorrect={numCorrect}
+        numAttempts={numAttempts}
+        emoji={emoji}
+        PCT={PCT}
+        gameType="note_id"
+        clearScore={clearScore}
+      />
     </>
   );
 }

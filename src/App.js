@@ -27,7 +27,7 @@ function App() {
               <Route path="/chord-calculator" component={ChordCalculator} />
               <Route path="/note-id" component={NoteID} />
               <Route path="/interval-eartraining" component={IntervalET} />
-              <Route path="/leaderboard" component={Leaderboard} />
+              <Route path="/leaderboard/:gameType" component={Leaderboard} />
               <Route path="/" exact component={ScaleCalculator} />
             </Grid>
           </Container>

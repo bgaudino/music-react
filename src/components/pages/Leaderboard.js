@@ -5,22 +5,56 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import { useLocation } from "react-router-dom";
+import { useMemo } from "react";
 import {
   Button,
   Card,
+  Container,
   TablePagination,
   TableSortLabel,
+  makeStyles,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { theme } from "../theme";
 
-export default function Leaderboard(props) {
+function useQuery() {
+  const { search } = useLocation();
+
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
+
+export default function Leaderboard() {
+  const location = useLocation();
+  const [game, setGame] = useState(
+    location.pathname.includes("interval_ear_training")
+      ? "interval_ear_training"
+      : "note_id"
+  );
+  const query = useQuery();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [game, setGame] = useState("note_id");
   const [direction, setDirection] = useState("desc");
   const [orderBy, setOrderBy] = useState("num_correct");
   const [offset, setOffset] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [count, setCount] = useState(0);
+  const [scoreId, setScoreId] = useState(0);
+
+  const useStyles = makeStyles(() => ({
+    active: {
+      backgroundColor: theme.palette.primary.main,
+    },
+    activeText: {
+      color: theme.palette.primary.contrastText,
+    },
+  }));
+
+  const classes = useStyles();
+
+  useEffect(() => {
+    setScoreId(Number(query.get("score_id")));
+  }, [query]);
 
   function handleSortChange(column) {
     if (orderBy === column) {
@@ -30,6 +64,17 @@ export default function Leaderboard(props) {
       setDirection(column === "name" ? "asc" : "desc");
     }
   }
+
+  function getGameType() {
+    return location.pathname.includes("interval_ear_training")
+      ? "interval_ear_training"
+      : "note_id";
+  }
+
+  useEffect(() => {
+    setGame(() => getGameType());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   useEffect(() => {
     let url = process.env.REACT_APP_LEADERBOARD_ENDPOINT;
@@ -54,12 +99,7 @@ export default function Leaderboard(props) {
     );
   }
   return (
-    <div
-      style={{
-        marginTop: "1rem",
-        width: "100%",
-      }}
-    >
+    <Container maxWidth="lg" style={{ marginBottom: "2rem" }}>
       <h2>Leaderboard</h2>
       <div
         style={{
@@ -67,29 +107,31 @@ export default function Leaderboard(props) {
           justifyContent: "space-evenly",
           alignItems: "center",
           marginBottom: "1rem",
-          width: "100%",
+          maxWidth: "100%",
         }}
       >
-        <Button
-          color={game === "note_id" ? "primary" : "secondary"}
-          variant={game === "note_id" ? "contained" : ""}
-          onClick={() => {
-            setOffset(0);
-            setGame("note_id");
-          }}
-        >
-          Note Identification
-        </Button>
-        <Button
-          color={game === "interval_ear_training" ? "primary" : "secondary"}
-          variant={game === "interval_ear_training" ? "contained" : ""}
-          onClick={() => {
-            setOffset(0);
-            setGame("interval_ear_training");
-          }}
-        >
-          Interval Ear Training
-        </Button>
+        <Link to="/leaderboard/note_id">
+          <Button
+            color={game === "note_id" ? "primary" : "secondary"}
+            variant={game === "note_id" ? "contained" : ""}
+            onClick={() => {
+              setOffset(0);
+            }}
+          >
+            Note Identification
+          </Button>
+        </Link>
+        <Link to="/leaderboard/interval_ear_training">
+          <Button
+            color={game === "interval_ear_training" ? "primary" : "secondary"}
+            variant={game === "interval_ear_training" ? "contained" : ""}
+            onClick={() => {
+              setOffset(0);
+            }}
+          >
+            Interval Ear Training
+          </Button>
+        </Link>
       </div>
       <TableContainer component={Card}>
         <Table>
@@ -134,13 +176,35 @@ export default function Leaderboard(props) {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell component="th" cope="row">
+              <TableRow
+                key={row.id}
+                className={row.id === scoreId ? classes.active : ""}
+              >
+                <TableCell
+                  className={row.id === scoreId ? classes.activeText : ""}
+                  component="th"
+                  cope="row"
+                >
                   {row.name}
                 </TableCell>
-                <TableCell align="center">{row.num_correct}</TableCell>
-                <TableCell align="center">{row.num_attempted}</TableCell>
-                <TableCell align="center">{row.percentage}%</TableCell>
+                <TableCell
+                  className={row.id === scoreId ? classes.activeText : ""}
+                  align="center"
+                >
+                  {row.num_correct}
+                </TableCell>
+                <TableCell
+                  className={row.id === scoreId ? classes.activeText : ""}
+                  align="center"
+                >
+                  {row.num_attempted}
+                </TableCell>
+                <TableCell
+                  className={row.id === scoreId ? classes.activeText : ""}
+                  align="center"
+                >
+                  {row.percentage}%
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -163,6 +227,6 @@ export default function Leaderboard(props) {
           />
         </div>
       </TableContainer>
-    </div>
+    </Container>
   );
 }

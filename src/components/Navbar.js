@@ -19,9 +19,10 @@ export default function Navbar() {
       color: theme.palette.primary.light,
       textDecoration: "none",
       fontWeight: "unset",
+      fontSize: "medium",
       transform: "scale(1)",
     };
-    if (location.pathname === path) {
+    if (location.pathname.includes(path)) {
       styles.fontWeight = "bold";
       styles.transform = "scale(1.1)";
     }
@@ -77,7 +78,7 @@ export default function Navbar() {
               >
                 Ear Training
               </Link>
-              <Link style={getStyles("/leaderboard")} to="/leaderboard">
+              <Link style={getStyles("/leaderboard")} to="/leaderboard/note_id">
                 Leaderboard
               </Link>
             </Box>

@@ -12,6 +12,7 @@ import {
   InputLabel,
 } from "@material-ui/core";
 import { getEmoji } from "../../utils/getEmoji";
+import SubmitScore from "../forms/SubmitScore";
 
 const btnStyle = {
   textTransform: "none",
@@ -59,12 +60,23 @@ export default function IntervalET(props) {
   const [playMode, setPlayMode] = useState("ascending");
   const [feedback, setFeedback] = useState("");
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [submitScore, setSubmitScore] = useState(false);
 
   useEffect(() => {
     const result = randomInterval();
     setInterval(result.interval);
     setNotes(result.notes);
   }, []);
+
+  function clearScore() {
+    localStorage.setItem("ETnumCorrect", 0);
+    localStorage.setItem("ETnumAttempts", 0);
+    setScore({
+      numCorrect: 0,
+      numAttempts: 0,
+      pct: 0,
+    });
+  }
 
   useEffect(() => {
     setEmoji(() => getEmoji(score.numAttempts, score.numCorrect));
@@ -165,11 +177,21 @@ export default function IntervalET(props) {
         onClick={onClick}
       />
       <Grid item xs={12} />
-      <Grid item xs={0} sm={4} />
-      <Grid item xs={12} sm={4}>
+      <Grid item xs={4}>
         <Button
           fullWidth
           variant="contained"
+          color="primary"
+          onClick={() => setSubmitScore(true)}
+          disabled={score.numAttempts === 0}
+        >
+          Submit Score
+        </Button>
+      </Grid>
+      <Grid item xs={4}>
+        <Button
+          fullWidth
+          variant="outlined"
           color="primary"
           onClick={() => {
             if (!started) setStarted(true);
@@ -183,25 +205,21 @@ export default function IntervalET(props) {
             : "Resume"}
         </Button>
       </Grid>
-      <Grid item xs={0} sm={4} />
-      <Grid item xs={0} sm={4} />
-      <Grid item xs={12} sm={4}>
-        <Button
-          fullWidth
-          onClick={() => {
-            setScore({
-              numCorrect: 0,
-              numAttempts: 0,
-              pct: 0,
-            });
-            localStorage.setItem("ETnumAttempts", 0);
-            localStorage.setItem("ETnumCorrect", 0);
-          }}
-          variant="contained"
-        >
+      <Grid item xs={4}>
+        <Button fullWidth onClick={clearScore} variant="contained">
           Reset Score
         </Button>
       </Grid>
+      <SubmitScore
+        numCorrect={score.numCorrect}
+        numAttempts={score.numAttempts}
+        PCT={score.pct}
+        emoji={emoji}
+        gameType="interval_ear_training"
+        isOpen={submitScore}
+        setIsOpen={setSubmitScore}
+        clearScore={clearScore}
+      />
     </>
   );
 }
