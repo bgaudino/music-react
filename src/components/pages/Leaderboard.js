@@ -17,6 +17,7 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { theme } from "../theme";
+import Loading from "../Loading";
 
 function useQuery() {
   const { search } = useLocation();
@@ -86,16 +87,19 @@ export default function Leaderboard() {
       .then((data) => {
         setRows(() => data.scores);
         setCount(() => data.count);
-        setLoading(() => false);
-      });
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(() => false));
   }, [orderBy, direction, offset, game, rowsPerPage]);
 
   if (loading) {
     return (
-      <div className="content">
-        <h2>Leaderboard</h2>
-        <div>...loading</div>
-      </div>
+      <>
+        <div className="content">
+          <h2 style={{ textAlign: "center" }}>Leaderboard</h2>
+        </div>
+        <Loading />
+      </>
     );
   }
   return (
