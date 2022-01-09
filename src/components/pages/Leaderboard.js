@@ -95,8 +95,15 @@ export default function Leaderboard() {
   if (loading) {
     return (
       <>
-        <div className="content">
-          <h2 style={{ textAlign: "center" }}>Leaderboard</h2>
+        <div
+          className="content"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <h2>Leaderboard</h2>
         </div>
         <Loading />
       </>
