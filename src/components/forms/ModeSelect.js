@@ -29,8 +29,8 @@ export default function ModeSelect(props) {
               ))
             : null}
           {scaleType === "harmonic major"
-            ? modes.harmonicMinor.map((mode) => (
-                <MenuItem key={mode} value={modes.harmonicMinor.indexOf(mode)}>
+            ? modes.harmonicMajor.map((mode) => (
+                <MenuItem key={mode} value={modes.harmonicMajor.indexOf(mode)}>
                   {mode}
                 </MenuItem>
               ))
